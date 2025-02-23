@@ -19,24 +19,28 @@ const Sidebar = () => {
                         isActive: true,
                         activeIcon: dashboard,
                         inActiveIcon: dashboardInactive,
+                        to: "/dashboard",
                     },
                     {
                         name: "User",
                         isActive: false,
                         activeIcon: profile,
                         inActiveIcon: profileInactive,
+                        to: "/users",
                     },
                     {
                         name: "Report",
                         isActive: false,
                         activeIcon: report,
                         inActiveIcon: reportInactive,
+                        to: "/reports",
                     },
                     {
                         name: "Schedule",
                         isActive: false,
                         activeIcon: schedule,
                         inActiveIcon: scheduleInactive,
+                        to: "/schedules",
                     },
                 ]}
             />
