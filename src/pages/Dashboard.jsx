@@ -1,7 +1,9 @@
+import AttendanceTable from "../Components/AttendanceTable.jsx";
+
 const Dashboard = () => {
     return (
         <>
-            <p>Dashboard</p>
+            <AttendanceTable />
         </>
     );
 };

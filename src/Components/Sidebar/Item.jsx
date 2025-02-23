@@ -12,7 +12,7 @@ const Sidebar = ({ items }) => {
                                 item.isActive ? "bg-primary/10" : "bg-white"
                             }`}>
                             <img src={item.isActive ? item.activeIcon : item.inActiveIcon} alt={item.name} className="w-4 h-6" />
-                            <span className="text-md">{item.name}</span>
+                            <span className="text-medium">{item.name}</span>
                         </Link>
                     </li>
                 ))}
