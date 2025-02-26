@@ -1,36 +1,40 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import edit from "../assets/icons/edit.svg";
+import trash from "../assets/icons/trash.svg";
+import { Link } from "react-router-dom";
 
-const AttendanceTable = () => {
-    const [attendances, setAttendances] = useState([]);
+const UserTable = () => {
+    const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        fetchData();
-    }, [currentPage]);
+        fetchUsers();
+    }, [currentPage, search]);
 
-    const fetchData = async () => {
+    const fetchUsers = async () => {
         try {
             const token = localStorage.getItem("token");
             if (!token) return console.error("No token found");
 
-            const response = await axios.get(`http://localhost:8000/api/attendances?page=${currentPage}`, {
+            const response = await axios.get(`http://localhost:8000/api/users?page=${currentPage}&search=${search}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            const data = response.data.data;
-            setAttendances(data.data);
-            setTotalPages(data.last_page);
+
+            setUsers(response.data.data);
+            setTotalPages(response.data.totalPages || 1);
         } catch (error) {
-            console.error("Error fetching attendance data:", error);
+            console.error("Error fetching users:", error);
         }
     };
 
     return (
         <div className="bg-white p-10 rounded-xl">
+            {/* Header Section */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold">Attendance Overview</h2>
+                <h2 className="text-xl font-bold">User List</h2>
                 <div className="flex gap-2">
                     <input
                         type="text"
@@ -39,9 +43,13 @@ const AttendanceTable = () => {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button className="bg-primary text-white px-4 py-2 rounded-lg">View Attendance</button>
+                    <Link to="/create-user" className="bg-primary text-white px-4 py-2 rounded-lg">
+                        Add User
+                    </Link>
                 </div>
             </div>
+
+            {/* Table Section */}
             <div className="overflow-x-auto">
                 <table className="w-full border-y border-primary/40 rounded">
                     <thead className="bg-white text-left">
@@ -49,46 +57,45 @@ const AttendanceTable = () => {
                             <th className="py-2 px-4 border-y border-primary/40">ID</th>
                             <th className="py-2 px-4 border-y border-primary/40">Name</th>
                             <th className="py-2 px-4 border-y border-primary/40">
-                                Role/<br></br>Department
+                                Role/
+                                <br />
+                                Department
                             </th>
-                            <th className="py-2 px-4 border-y border-primary/40">Date</th>
-                            <th className="py-2 px-4 border-y border-primary/40">Status</th>
-                            <th className="py-2 px-4 border-y border-primary/40">Check-in</th>
-                            <th className="py-2 px-4 border-y border-primary/40">Check-out</th>
-                            <th className="py-2 px-4 border-y border-primary/40">Work Hours</th>
+                            <th className="py-2 px-4 border-y border-primary/40">Date Created</th>
+                            <th className="py-2 px-4 border-y border-primary/40">Email</th>
+                            <th className="py-2 px-4 border-y border-primary/40">Account Status</th>
+                            <th className="py-2 px-4 border-y border-primary/40">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="text-left text-sm">
-                        {attendances.map((record) => (
-                            <tr key={record.id} className="hover:bg-gray-50">
-                                <td className="py-2 px-4 border-t border-primary/10">{record.user.employee_id}</td>
-                                <td className="py-2 px-4 border-t border-primary/10">{record.user.profile.name}</td>
+                        {users.map((user) => (
+                            <tr key={user.id} className="hover:bg-gray-50">
+                                <td className="py-2 px-4 border-t border-primary/10">{user.employeeId}</td>
+                                <td className="py-2 px-4 border-t border-primary/10">{user.employeeName}</td>
                                 <td className="py-2 px-4 border-t border-primary/10 flex flex-col">
-                                    <span className="font-semibold">{record.user.profile.role.name}</span>
-                                    <span>{record.user.profile.department.name}</span>
+                                    <span className="font-semibold">{user.employeeRole}</span>
+                                    <span>{user.employeeDepartment}</span>
                                 </td>
                                 <td className="py-2 px-4 border-t border-primary/10">
-                                    {new Date(record.date * 1000).toLocaleDateString("id-ID", { hours12: false })}
+                                    {new Date(user.dateCreated * 1000).toLocaleDateString("id-ID")}
                                 </td>
+                                <td className="py-2 px-4 border-t border-primary/10">{user.employeeEmail}</td>
+                                <td className="py-2 px-4 border-t border-primary/10">{user.accountStatus === 1 ? "Active" : "Inactive"}</td>
                                 <td className="py-2 px-4 border-t border-primary/10">
-                                    {record.check_out_time ? record.check_out_status : record.check_in_status}
-                                </td>
-                                <td className="py-2 px-4 border-t border-primary/10">
-                                    {new Date(record.check_in_time * 1000).toLocaleTimeString("id-ID", { hours12: false })}
-                                </td>
-                                <td className="py-2 px-4 border-t border-primary/10">
-                                    {record.check_out_time
-                                        ? new Date(record.check_out_time * 1000).toLocaleTimeString("id-ID", { hours12: false })
-                                        : "-"}
-                                </td>
-                                <td className="py-2 px-4 border-t border-primary/10">
-                                    {record.check_out_time ? ((record.check_out_time - record.check_in_time) / 3600).toFixed(2) + " hrs" : "-"}
+                                    <button className="mr-6 cursor-pointer">
+                                        <img src={edit} className="w-4" />
+                                    </button>
+                                    <button className="cursor-pointer">
+                                        <img src={trash} className="w-4" />
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+
+            {/* Pagination */}
             <div className="flex justify-between items-center mt-4">
                 <button
                     disabled={currentPage === 1}
@@ -110,4 +117,4 @@ const AttendanceTable = () => {
     );
 };
 
-export default AttendanceTable;
+export default UserTable;

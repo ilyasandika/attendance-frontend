@@ -10,8 +10,9 @@ import scheduleInactive from "../../assets/icons/schedule_inactive.svg";
 
 const Sidebar = () => {
     return (
-        <aside className="w-64 bg-white text-primary h-screen py-5 px-8">
-            <h2 className="p-4 text-center text-2xl font-bold">Dashboard</h2>
+        <aside className="w-64 bg-white text-primary min-h-screen fixed py-5 px-8">
+            <img src="/images/logo.svg" className="p-4 text-center" />
+            {/* <h2 className="p-4 text-center text-2xl font-bold">Dashboard</h2> */}
             <Item
                 items={[
                     {

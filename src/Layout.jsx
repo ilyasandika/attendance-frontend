@@ -13,7 +13,7 @@ const Layout = () => {
             <Sidebar />
             <div className="flex-1">
                 <Header />
-                <main className="p-14 mt-16 text-center">
+                <main className="p-14 ml-64 mt-16 text-center">
                     <Outlet />
                 </main>
             </div>

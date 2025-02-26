@@ -20,7 +20,7 @@ const Login = () => {
                 password,
             });
 
-            const token = response.data.data[0].token;
+            const token = response.data.data.token;
 
             localStorage.setItem("token", token);
 
@@ -39,7 +39,7 @@ const Login = () => {
 
             <div className="bg-white w-5/12 h-full px-10 pt-25 flex flex-col gap-8">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-center font-bold text-3xl">Welcome!</h1>
+                    <h1 className="text-center font-bold text-3xl">Welcome to</h1>
                     <h2 className="text-center">Please enter your credentials</h2>
                 </div>
 
