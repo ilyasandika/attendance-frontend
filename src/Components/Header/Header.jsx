@@ -9,35 +9,29 @@ const Header = () => {
     });
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchAllData = async () => {
             try {
                 const token = localStorage.getItem("token");
                 if (!token) return console.error("No token found");
 
-                const response = await axios.get("http://localhost:8000/api/users/profile", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const [userResponse, serverTimeResponse] = await Promise.all([
+                    axios.get("http://localhost:8000/api/users/profile", {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }),
+                    axios.get("http://localhost:8000/api/server-time"),
+                ]);
 
-                setUser(response.data.data);
-            } catch (error) {
-                console.error("Failed to fetch user:", error);
-            }
-        };
-
-        const fetchServerTime = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/server-time");
+                setUser(userResponse.data.data);
                 setServerTime({
-                    day: response.data.day,
-                    datetime: new Date(response.data.datetime),
+                    day: serverTimeResponse.data.day,
+                    datetime: new Date(serverTimeResponse.data.datetime),
                 });
             } catch (error) {
-                console.error("Error fetching server time:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchUser();
-        fetchServerTime();
+        fetchAllData();
 
         // Update waktu di frontend setiap detik tanpa nge-hit API terus
         const interval = setInterval(() => {

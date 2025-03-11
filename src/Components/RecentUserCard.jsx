@@ -18,7 +18,6 @@ const RecentUserCard = () => {
             const response = await axios.get("http://localhost:8000/api/users/recent", {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            console.log(response.data.data);
             setRecentUsers(response.data.data[0]);
         } catch (error) {
             console.error("Error fetching recent users:", error);
