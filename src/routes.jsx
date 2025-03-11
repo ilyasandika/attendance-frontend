@@ -6,7 +6,7 @@ import User from "./pages/User";
 import NotFound from "./pages/NotFound";
 import Layout from "./Layout.jsx";
 import Login from "./pages/Login.jsx";
-import CreateUserForm from "./Components/CreateUserForm.jsx";
+import CreateUserForm from "./Components/Form/CreateUserForm.jsx";
 
 const AppRoutes = () => {
     return (

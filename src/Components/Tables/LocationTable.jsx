@@ -5,69 +5,58 @@ import trash from "../../assets/icons/trash.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const UserTable = () => {
-    const [users, setUsers] = useState([]);
+const LocationTable = () => {
+    const [locations, setLocations] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        const getUsers = setTimeout(() => {
-            fetchUsers();
+        const getLocations = setTimeout(() => {
+            fetchLocations();
         }, 300);
-        return () => clearTimeout(getUsers);
+        return () => clearTimeout(getLocations);
     }, [currentPage, search]);
 
-    const fetchUsers = useCallback(async () => {
+    const fetchLocations = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
             if (!token) return console.error("No token found");
 
-            const response = await axios.get(`http://localhost:8000/api/users?page=${currentPage}&search=${search}`, {
+            const response = await axios.get(`http://localhost:8000/api/schedules/locations?page=${currentPage}&search=${search}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            setUsers(response.data.data);
+            setLocations(response.data.data);
             setTotalPages(response.data.totalPages || 1);
         } catch (error) {
-            console.error("Error fetching users:", error);
+            console.error("Error fetching locations:", error);
         }
     }, [currentPage, search]);
 
     const columns = useMemo(
         () => [
             {
-                key: "employeeId",
-                label: "ID",
+                key: "name",
+                label: "Location Name",
+                render: (val) => <span className="font-bold">{val}</span>,
             },
             {
-                key: "employeeName",
-                label: "Name",
+                key: "latitude",
+                label: "Office Latitude",
             },
             {
-                key: "employeeRole",
-                label: (
-                    <>
-                        Role/ <br />
-                        Department
-                    </>
-                ),
-                render: (_, row) => (
-                    <div className="flex flex-col">
-                        <span className="font-semibold">{row.employeeRole}</span>
-                        <span className="text-sm text-gray-500">{row.employeeDepartment}</span>
-                    </div>
-                ),
+                key: "longitude",
+                label: "Office Longitude",
             },
             {
-                key: "dateCreated",
-                label: "Date Created",
-                render: (val) => new Date(val * 1000).toLocaleString("id-ID"),
+                key: "radius",
+                label: "Radius",
+                render: (val) => `${val} meter`,
             },
             {
-                key: "accountStatus",
-                label: "Account Status",
-                render: (val) => (val === 1 ? "Active" : "Inactive"),
+                key: "address",
+                label: "Address",
             },
             {
                 key: "action",
@@ -88,10 +77,10 @@ const UserTable = () => {
     );
 
     let header = {
-        title: "User List",
+        title: "Location List",
         button: {
             link: "/",
-            text: "Add User",
+            text: "Add Location",
         },
         setSearch,
         setTotalPages,
@@ -101,11 +90,7 @@ const UserTable = () => {
         currentPage,
     };
 
-    return (
-        <>
-            <DataTable header={header} columns={columns} items={users} />
-        </>
-    );
+    return <>{<DataTable header={header} columns={columns} items={locations} />}</>;
 };
 
-export default UserTable;
+export default LocationTable;

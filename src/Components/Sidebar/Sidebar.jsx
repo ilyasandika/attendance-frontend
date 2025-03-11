@@ -7,8 +7,11 @@ import report from "../../assets/icons/report.svg";
 import reportInactive from "../../assets/icons/report_inactive.svg";
 import schedule from "../../assets/icons/schedule.svg";
 import scheduleInactive from "../../assets/icons/schedule_inactive.svg";
+import { useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+    const location = useLocation();
+
     return (
         <aside className="w-64 bg-white text-primary min-h-screen fixed py-5 px-8">
             <img src="/images/logo.svg" className="p-4 text-center" />
@@ -17,31 +20,39 @@ const Sidebar = () => {
                 items={[
                     {
                         name: "Dashboard",
-                        isActive: true,
                         activeIcon: dashboard,
                         inActiveIcon: dashboardInactive,
                         to: "/dashboard",
+                        get isActive() {
+                            return location.pathname.startsWith(this.to);
+                        },
                     },
                     {
                         name: "User",
-                        isActive: false,
                         activeIcon: profile,
                         inActiveIcon: profileInactive,
                         to: "/users",
+                        get isActive() {
+                            return location.pathname.startsWith(this.to);
+                        },
                     },
                     {
                         name: "Report",
-                        isActive: false,
                         activeIcon: report,
                         inActiveIcon: reportInactive,
                         to: "/reports",
+                        get isActive() {
+                            return location.pathname.startsWith(this.to);
+                        },
                     },
                     {
                         name: "Schedule",
-                        isActive: false,
                         activeIcon: schedule,
                         inActiveIcon: scheduleInactive,
                         to: "/schedules",
+                        get isActive() {
+                            return location.pathname.startsWith(this.to);
+                        },
                     },
                 ]}
             />

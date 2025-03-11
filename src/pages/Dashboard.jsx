@@ -1,4 +1,4 @@
-import AttendanceTable from "../Components/AttendanceTable.jsx";
+import AttendanceTable from "../Components/Tables/AttendanceTable.jsx";
 
 const Dashboard = () => {
     return (

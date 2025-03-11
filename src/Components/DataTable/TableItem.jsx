@@ -1,7 +1,7 @@
 const TableItem = ({ children }) => {
     return (
         <>
-            <td className="py-2 px-4 border-t border-primary/10">{children}</td>
+            <td className="py-3 px-4 border-t border-primary/10">{children}</td>
         </>
     );
 };
