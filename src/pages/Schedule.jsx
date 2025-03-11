@@ -1,4 +1,4 @@
-import ShiftTable from "../Components/ShiftTable.jsx";
+import ShiftTable from "../Components/Tables/ShiftTable.jsx";
 
 const Schedule = () => {
     return (

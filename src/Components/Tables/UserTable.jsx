@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import DataTable from "./DataTable/DataTable.jsx";
+import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../assets/icons/edit.svg";
 import trash from "../assets/icons/trash.svg";
 import { Link } from "react-router-dom";
