@@ -44,7 +44,6 @@ const Header = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // Format datetime sesuai permintaan
     const formatDateTime = (date) => {
         const options = {
             weekday: "long",
@@ -60,7 +59,7 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white px-10 py-10 fixed left-64 top-0 right-0 h-16 flex items-center justify-between">
+        <header className="z-50 bg-white px-10 py-10 fixed left-64 top-0 right-0 h-16 flex items-center justify-between">
             <h1 className="font-semibold">{serverTime.day ? `${formatDateTime(serverTime.datetime)}` : "Loading data ..."}</h1>
 
             <div className="flex items-center gap-6">
