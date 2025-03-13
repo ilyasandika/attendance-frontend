@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import TableHeader from "./TableHeader.jsx";
 import TableItem from "./TableItem.jsx";
 
-const DataTable = ({ header, columns, items }) => {
+const DataTable = ({ header, columns, items, pagination }) => {
     return (
         <div className="bg-white p-10 rounded-xl">
             {/* Header Section */}
@@ -17,7 +17,7 @@ const DataTable = ({ header, columns, items }) => {
                         placeholder="Search..."
                         className="border rounded-lg px-3 py-1"
                         value={header.search}
-                        onChange={(e) => header.setSearch(e.target.value)}
+                        onChange={(e) => pagination.setSearch(e.target.value)}
                     />
                     <Link to={header.button.link} className="bg-primary text-white px-4 py-2 rounded-lg">
                         {header.button.text}
@@ -50,18 +50,18 @@ const DataTable = ({ header, columns, items }) => {
             {/* Pagination */}
             <div className="flex justify-between items-center mt-4">
                 <button
-                    disabled={header.currentPage === 1}
-                    onClick={() => header.setCurrentPage((prev) => prev - 1)}
-                    className="px-4 py-1 border rounded disabled:opacity-50">
+                    disabled={pagination.currentPage === 1}
+                    onClick={() => pagination.handlePageChange(pagination.currentPage - 1)}
+                    className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
                     Previous
                 </button>
                 <span>
-                    Page {header.currentPage} of {header.totalPages}
+                    Page {pagination.currentPage} of {pagination.totalPages}
                 </span>
                 <button
-                    disabled={header.currentPage === header.totalPages}
-                    onClick={() => header.setCurrentPage((prev) => prev + 1)}
-                    className="px-4 py-1 border rounded disabled:opacity-50">
+                    disabled={pagination.currentPage === pagination.totalPages}
+                    onClick={() => pagination.handlePageChange(pagination.currentPage + 1)}
+                    className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
                     Next
                 </button>
             </div>

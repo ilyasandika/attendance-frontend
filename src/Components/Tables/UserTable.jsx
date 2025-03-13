@@ -2,21 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../../assets/icons/edit.svg";
 import trash from "../../assets/icons/trash.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const UserTable = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page")) || null;
+
     const [users, setUsers] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const getUsers = setTimeout(() => {
-            fetchUsers();
-        }, 300);
-        return () => clearTimeout(getUsers);
-    }, [currentPage, search]);
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setSearchParams({ page: newPage.toString() });
+        }
+    };
 
     const fetchUsers = useCallback(async () => {
         try {
@@ -27,11 +29,27 @@ const UserTable = () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            setUsers(response.data.data);
-            setTotalPages(response.data.totalPages || 1);
+            setUsers(response.data.payload.users);
+            setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
             console.error("Error fetching users:", error);
         }
+    }, [currentPage, search]);
+
+    //first mount
+    useEffect(() => {
+        if (!currentPage) {
+            navigate("/users?page=1", { replace: true });
+        }
+
+        if (search) {
+            navigate(`/users?page=${currentPage}&search=${search}`, { replace: true });
+        }
+
+        const getUsers = setTimeout(() => {
+            fetchUsers();
+        }, 300);
+        return () => clearTimeout(getUsers);
     }, [currentPage, search]);
 
     const columns = useMemo(
@@ -87,15 +105,18 @@ const UserTable = () => {
         []
     );
 
-    let header = {
+    const header = {
         title: "User List",
         button: {
             link: "/",
             text: "Add User",
         },
+    };
+
+    const pagination = {
         setSearch,
         setTotalPages,
-        setCurrentPage,
+        handlePageChange,
         search,
         totalPages,
         currentPage,
@@ -103,7 +124,7 @@ const UserTable = () => {
 
     return (
         <>
-            <DataTable header={header} columns={columns} items={users} />
+            <DataTable header={header} columns={columns} items={users} pagination={pagination} />
         </>
     );
 };

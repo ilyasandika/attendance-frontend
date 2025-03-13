@@ -9,8 +9,8 @@ const User = () => {
                 <UserTable />
             </div>
             <div className="flex gap-6">
-                <RecentUserCard />
-                <UserOverview />
+                {/* <RecentUserCard />
+                <UserOverview /> */}
             </div>
         </div>
     );

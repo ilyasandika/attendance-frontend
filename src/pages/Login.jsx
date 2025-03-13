@@ -20,7 +20,7 @@ const Login = () => {
                 password,
             });
 
-            const token = response.data.data.token;
+            const token = response.data.payload.token;
 
             localStorage.setItem("token", token);
 

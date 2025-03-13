@@ -15,13 +15,13 @@ const Header = () => {
                 if (!token) return console.error("No token found");
 
                 const [userResponse, serverTimeResponse] = await Promise.all([
-                    axios.get("http://localhost:8000/api/users/profile", {
+                    axios.get("http://localhost:8000/api/users/current", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                     axios.get("http://localhost:8000/api/server-time"),
                 ]);
 
-                setUser(userResponse.data.data);
+                setUser(userResponse.data.payload);
                 setServerTime({
                     day: serverTimeResponse.data.day,
                     datetime: new Date(serverTimeResponse.data.datetime),
