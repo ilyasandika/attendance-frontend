@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import departmentService from "../../services/departmentService.js";
 
 const CreateUserForm = () => {
     const [formData, setFormData] = useState({
@@ -32,9 +33,7 @@ const CreateUserForm = () => {
             if (!token) return console.error("No token found");
 
             const [departmentsRes, rolesRes, shiftsRes, locationsRes] = await Promise.all([
-                axios.get("http://localhost:8000/api/departments", {
-                    headers: { Authorization: `Bearer ${token}` },
-                }),
+                departmentService.getDepartments(),
                 axios.get("http://localhost:8000/api/roles", {
                     headers: { Authorization: `Bearer ${token}` },
                 }),

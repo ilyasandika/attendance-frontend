@@ -16,7 +16,7 @@ const AppRoutes = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/reports" element={<Report />} />
                 <Route path="/users" element={<User />} />
-                <Route path="/create-user" element={<CreateUserForm />} />
+                <Route path="/users/add" element={<CreateUserForm />} />
                 <Route path="/schedules" element={<Schedule />} />
                 <Route path="*" element={<NotFound />} />
             </Route>

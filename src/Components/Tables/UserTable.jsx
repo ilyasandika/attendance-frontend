@@ -94,9 +94,9 @@ const UserTable = () => {
             label: "Action",
             render: (_, row) => (
                 <div className="flex">
-                    <button className="mr-6 cursor-pointer">
+                    <Link to="/users/add" className="mr-6 cursor-pointer">
                         <img src={edit} className="w-4" />
-                    </button>
+                    </Link>
                     <button className="cursor-pointer">
                         <img src={trash} className="w-4" />
                     </button>
