@@ -4,8 +4,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import TableHeader from "./TableHeader.jsx";
 import TableItem from "./TableItem.jsx";
+import { handlePageChange } from "../../utils/helper.js";
 
-const DataTable = ({ header, columns, items, pagination }) => {
+const DataTable = ({ header, columns, items, pagination, isLoading }) => {
     return (
         <div className="bg-white p-10 rounded-xl">
             {/* Header Section */}
@@ -36,13 +37,29 @@ const DataTable = ({ header, columns, items, pagination }) => {
                         </tr>
                     </thead>
                     <tbody className="text-left text-sm">
-                        {items.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50">
-                                {columns.map((column) => (
-                                    <TableItem key={column.key}>{column.render ? column.render(item[column.key], item) : item[column.key]}</TableItem>
-                                ))}
+                        {isLoading ? (
+                            <tr>
+                                <TableItem isFull={true} totalCol={columns.length}>
+                                    <span className="text-center">Loading data ...</span>
+                                </TableItem>
                             </tr>
-                        ))}
+                        ) : items.length < 1 ? (
+                            <tr>
+                                <TableItem isFull={true} totalCol={columns.length}>
+                                    <span className="text-center">Nothing to display</span>
+                                </TableItem>
+                            </tr>
+                        ) : (
+                            items.map((item) => (
+                                <tr key={item.id} className="hover:bg-gray-50">
+                                    {columns.map((column) => (
+                                        <TableItem key={column.key}>
+                                            {column.render ? column.render(item[column.key], item) : item[column.key]}
+                                        </TableItem>
+                                    ))}
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
@@ -51,7 +68,7 @@ const DataTable = ({ header, columns, items, pagination }) => {
             <div className="flex justify-between items-center mt-4">
                 <button
                     disabled={pagination.currentPage === 1}
-                    onClick={() => pagination.handlePageChange(pagination.currentPage - 1)}
+                    onClick={() => handlePageChange(pagination.setSearchParams, pagination.currentPage - 1, pagination.totalPages)}
                     className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
                     Previous
                 </button>
@@ -60,7 +77,7 @@ const DataTable = ({ header, columns, items, pagination }) => {
                 </span>
                 <button
                     disabled={pagination.currentPage === pagination.totalPages}
-                    onClick={() => pagination.handlePageChange(pagination.currentPage + 1)}
+                    onClick={() => handlePageChange(pagination.setSearchParams, pagination.currentPage + 1, pagination.totalPages)}
                     className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
                     Next
                 </button>

@@ -6,8 +6,8 @@ const Schedule = () => {
     return (
         <div className="flex flex-col gap-6">
             <ShiftTable />
-            <LocationTable />
-            <ScheduleTable />
+            {/* <LocationTable />
+            <ScheduleTable /> */}
         </div>
     );
 };

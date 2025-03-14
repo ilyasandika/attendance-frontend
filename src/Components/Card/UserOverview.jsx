@@ -18,7 +18,7 @@ const UserOverview = () => {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            setChartData(response.data.data);
+            setChartData(response.data.payload);
         } catch (error) {
             console.error("Error fetching user statistics:", error);
         }
