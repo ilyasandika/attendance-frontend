@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import departmentService from "../../services/departmentService.js";
+import { Link } from "react-router-dom";
+import roleService from "../../services/roleService.js";
 
 const CreateUserForm = () => {
     const [formData, setFormData] = useState({
@@ -34,9 +36,7 @@ const CreateUserForm = () => {
 
             const [departmentsRes, rolesRes, shiftsRes, locationsRes] = await Promise.all([
                 departmentService.getDepartments(),
-                axios.get("http://localhost:8000/api/roles", {
-                    headers: { Authorization: `Bearer ${token}` },
-                }),
+                roleService.getRoles(),
                 axios.get("http://localhost:8000/api/schedules/shifts", {
                     headers: { Authorization: `Bearer ${token}` },
                 }),
@@ -47,8 +47,8 @@ const CreateUserForm = () => {
 
             setDepartments(departmentsRes.data.data || []);
             setRoles(rolesRes.data.data || []);
-            setShifts(shiftsRes.data.data || []);
-            setLocations(locationsRes.data.data || []);
+            setShifts(shiftsRes.data.payload.data || []);
+            setLocations(locationsRes.data.payload.data || []);
         } catch (error) {
             console.error("Error fetching dropdown data:", error);
         }
@@ -195,8 +195,8 @@ const CreateUserForm = () => {
                                 className="input border border-primary/10 mt-2 rounded-md py-2 px-4">
                                 <option value="">Select Shift</option>
                                 {shifts.map((shift) => (
-                                    <option key={shift.id} value={shift.id}>
-                                        {shift.name}
+                                    <option key={shift.shiftId} value={shift.shiftId}>
+                                        {shift.shiftName}
                                     </option>
                                 ))}
                             </select>
@@ -245,9 +245,9 @@ const CreateUserForm = () => {
 
                 {/* Buttons */}
                 <div className="flex justify-end gap-3 mt-4">
-                    <button type="button" className="cursor-pointer border border-primary text-primary px-4 py-2 rounded-md">
+                    <Link to="/users" className="cursor-pointer border border-primary text-primary px-4 py-2 rounded-md">
                         Cancel
-                    </button>
+                    </Link>
                     <button type="submit" className="cursor-pointer bg-primary text-white px-4 py-2 rounded-md">
                         Create User
                     </button>

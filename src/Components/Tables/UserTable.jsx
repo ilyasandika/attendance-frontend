@@ -18,7 +18,6 @@ const UserTable = () => {
     const fetchUsers = useCallback(async () => {
         try {
             const response = await userService.getUsers(currentPage, search);
-
             setUsers(response.data.payload.users);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -108,7 +107,7 @@ const UserTable = () => {
     const header = {
         title: "User List",
         button: {
-            link: "/",
+            link: "/users/add",
             text: "Add User",
         },
     };
