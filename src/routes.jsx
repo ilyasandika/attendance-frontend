@@ -6,7 +6,7 @@ import User from "./pages/User";
 import NotFound from "./pages/NotFound";
 import Layout from "./Layout.jsx";
 import Login from "./pages/Login.jsx";
-import CreateUserForm from "./Components/Form/CreateUserForm.jsx";
+import CreateUser from "./pages/CreateUser.jsx";
 
 const AppRoutes = () => {
     return (
@@ -16,7 +16,7 @@ const AppRoutes = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/reports" element={<Report />} />
                 <Route path="/users" element={<User />} />
-                <Route path="/users/add" element={<CreateUserForm />} />
+                <Route path="/users/add" element={<CreateUser />} />
                 <Route path="/schedules" element={<Schedule />} />
                 <Route path="*" element={<NotFound />} />
             </Route>

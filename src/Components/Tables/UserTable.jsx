@@ -5,6 +5,7 @@ import trash from "../../assets/icons/trash.svg";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { updateSearchParams } from "../../utils/helper.js";
 import userService from "../../services/userService.js";
+import axios from "axios";
 
 const UserTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -18,6 +19,7 @@ const UserTable = () => {
     const fetchUsers = useCallback(async () => {
         try {
             const response = await userService.getUsers(currentPage, search);
+
             setUsers(response.data.payload.users);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -26,6 +28,16 @@ const UserTable = () => {
             setIsLoading(false);
         }
     }, [currentPage, search]);
+
+    const deleteUser = async (id) => {
+        try {
+            await userService.deleteUser(id);
+            alert("Success delete a user");
+            fetchUsers();
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     //first mount
     useEffect(() => {
@@ -96,7 +108,7 @@ const UserTable = () => {
                     <Link to="/users/add" className="mr-6 cursor-pointer">
                         <img src={edit} className="w-4" />
                     </Link>
-                    <button className="cursor-pointer">
+                    <button className="cursor-pointer" onClick={() => deleteUser(row.id)}>
                         <img src={trash} className="w-4" />
                     </button>
                 </div>
