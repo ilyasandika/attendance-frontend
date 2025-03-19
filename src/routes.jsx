@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import Layout from "./Layout.jsx";
 import Login from "./pages/Login.jsx";
 import CreateUser from "./pages/CreateUser.jsx";
+import EditUser from "./pages/EditUser.jsx";
 
 const AppRoutes = () => {
     return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
                 <Route path="/reports" element={<Report />} />
                 <Route path="/users" element={<User />} />
                 <Route path="/users/add" element={<CreateUser />} />
+                <Route path="/users/edit/:id" element={<EditUser />} />
                 <Route path="/schedules" element={<Schedule />} />
                 <Route path="*" element={<NotFound />} />
             </Route>

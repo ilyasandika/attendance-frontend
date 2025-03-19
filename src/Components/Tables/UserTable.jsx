@@ -105,7 +105,7 @@ const UserTable = () => {
             label: "Action",
             render: (_, row) => (
                 <div className="flex">
-                    <Link to="/users/add" className="mr-6 cursor-pointer">
+                    <Link to={`/users/edit/${row.id}`} className="mr-6 cursor-pointer">
                         <img src={edit} className="w-4" />
                     </Link>
                     <button className="cursor-pointer" onClick={() => deleteUser(row.id)}>

@@ -1,7 +1,7 @@
 const GenderDropdown = ({ handleChange }) => {
     return (
         <div className="flex flex-col">
-            <label for="employeeGender" className="text-sm font-medium">
+            <label htmlFor="employeeGender" className="text-sm font-medium">
                 Gender
             </label>
             <select
