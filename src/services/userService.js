@@ -23,6 +23,31 @@ const userService = {
         }
     },
 
+    updateUser: async (data) => {
+        try {
+            console.log(data);
+            const response = await api.post(`/users/${data.id}`, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            return response;
+        } catch (error) {
+            console.error("Error updating user: ", error);
+            throw error.response?.data?.message || "Something went wrong";
+        }
+    },
+
+    getUserById: async (id) => {
+        try {
+            const response = await api.get(`/users/${id}`);
+            return response;
+        } catch (error) {
+            console.error("Error find user: ".Error);
+            throw error.response?.data?.message;
+        }
+    },
+
     deleteUser: async (id) => {
         try {
             const response = await api.delete(`/users/${id}`);

@@ -27,4 +27,12 @@ const handlePageChange = (setSearchParams, newPage, totalPages) => {
     }
 };
 
-export { getAuthToken, updateSearchParams, handlePageChange };
+const formattedDate = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+};
+
+export { getAuthToken, updateSearchParams, handlePageChange, formattedDate };

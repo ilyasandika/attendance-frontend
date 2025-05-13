@@ -71,8 +71,7 @@ const CreateUserForm = () => {
         }
 
         try {
-            const response = await userService.createUser(requestData);
-            console.log(response);
+            await userService.createUser(requestData);
             alert("User created successfully!");
             window.location.href = "/users";
         } catch (error) {
@@ -108,17 +107,33 @@ const CreateUserForm = () => {
                             name="employeeDepartmentId"
                             label="Department"
                             handleChange={handleChange}
-                            values={departments}
+                            items={departments}
+                            placeholder="Select Department"
                         />
 
-                        <Dropdown id="employeeRole" name="employeeRoleId" label="Role" handleChange={handleChange} values={roles} />
-                        <Dropdown id="employeeShift" name="employeeShiftId" label="Shift Schedule" handleChange={handleChange} values={shifts} />
+                        <Dropdown
+                            id="employeeRole"
+                            name="employeeRoleId"
+                            label="Role"
+                            handleChange={handleChange}
+                            items={roles}
+                            placeholder="Select Role"
+                        />
+                        <Dropdown
+                            id="employeeShift"
+                            name="employeeShiftId"
+                            label="Shift Schedule"
+                            handleChange={handleChange}
+                            items={shifts}
+                            placeholder="Select Shift"
+                        />
                         <Dropdown
                             id="employeeWorkLocation"
                             name="employeeWorkLocationId"
                             label="Work Location"
                             handleChange={handleChange}
-                            values={locations}
+                            items={locations}
+                            placeholder="Select Work Location"
                         />
                     </div>
                 </div>

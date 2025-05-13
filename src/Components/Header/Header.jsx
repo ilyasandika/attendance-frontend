@@ -71,7 +71,11 @@ const Header = () => {
                 ) : (
                     <span>Loading user data...</span>
                 )}
-                <img src="/images/default.svg" className="w-10 rounded-full" />
+                {user ? (
+                    <img src={`${import.meta.env.VITE_API_URL}/storage/${user.profilePicturePath}`} className="w-12 h-12 rounded-full object-cover" />
+                ) : (
+                    <img src="/images/default.svg" className="w-10 rounded-full" />
+                )}
             </div>
         </header>
     );
