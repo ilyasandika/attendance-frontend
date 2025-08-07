@@ -1,0 +1,136 @@
+{
+  "clockIn" : "clock in",
+  "clockOut" : "clock out",
+  "name" : "nama",
+  "date" : "tanggal",
+  "workHours" : "jam kerja",
+  "role" : "jabatan",
+  "department" : "departemen",
+  "dateCreated" : "waktu dibuat",
+  "accountStatus" : "status akun",
+  "action" : "aksi",
+  "select" : "pilih",
+  "male" : "laki-laki",
+  "female" : "perempuan",
+  "address" : "alamat",
+  "location": "lokasi",
+
+  "departments" : {
+    "list" : "daftar departemen",
+    "add" : "tambahkan departemen",
+    "edit" : "edit departemen",
+    "name" : "nama departemen",
+    "create" : "buat departemen",
+    "inUse" : "tidak bisa menghapus departemen yang digunakan oleh pengguna",
+    "update" : "perbarui departemen"
+  },
+
+  "roles" : {
+    "list" : "daftar jabatan",
+    "add" : "tambahkan jabatan",
+    "edit" : "edit jabatan",
+    "name" : "nama jabatan",
+    "create" : "buat jabatan",
+    "update" : "perbarui jabatan",
+    "inUse" : "tidak bisa menghapus jabatan yang digunakan oleh pengguna"
+  },
+
+  "locations" : {
+    "name" : "nama lokasi",
+    "inUse" : "tidak bisa menghapus lokasi yang digunakan oleh jadwal pengguna",
+    "add" : "tambahkan lokasi",
+    "list" : "daftar lokasi",
+    "edit" : "edit lokasi",
+    "update" : "update lokasi",
+    "selectLocationOnMap" : "pilih lokasi pada peta",
+    "create" : "buat lokasi",
+    "radius" : "radius"
+  },
+
+
+
+  "user" : {
+    "list" : "daftar pengguna",
+    "add" : "tambahkan pengguna",
+    "edit" : "edit data pengguna",
+    "uploadAPhoto" : "Unggah foto",
+    "create" : "buat pengguna baru",
+    "username" : "nama pengguna",
+    "deleteMessage" : "Apakah kamu yakin menghapus akun ini? Semua data terkait akun ini akan dihapus secara permanen dan tidak bisa dikembalikan!",
+    "deleteHeader" : "hapus akun",
+    "confirmPasswordRequired" : "konfirmasi kata sandi tidak boleh kosong",
+    "confirmPasswordNotMatch" : "kata sandi tidak sama",
+    "credential" : "kredensial",
+    "employeeId" : "ID karyawan",
+    "fullName" : "nama lengkap",
+    "gender" : "jenis kelamin",
+    "phoneNumber" : "nomor telepon",
+    "birthDate" : "tanggal lahir",
+    "workLocation" : "lokasi kerja",
+    "password" : "kata sandi",
+    "confirmPassword" : "konfirmasi kata sandi",
+    "workInformation" : "informasi pekerjaan",
+    "profileInformation" : "informasi profil",
+    "role" : "jabatan",
+    "department" : "departemen",
+    "contactInformation" : "informasi kontak",
+    "biography" : "deskripsi diri",
+    "recent" : "pengguna yang baru didaftarkan",
+    "statisticByDepartment" : "Statistik Pengguna Berdasarkan Departemen"
+
+  },
+
+  "schedules" : {
+    "list" : "Daftar Penugasan Kerja"
+  },
+
+  "shift" : {
+    "list" : "daftar shift",
+    "add" : "tambahkan shift",
+    "dayOff" : "libur",
+    "edit" : "perbarui shift",
+    "name" : "nama shift",
+    "inUse" : "tidak bisa menghapus shift yang sedang digunakan oleh jadwal pengguna",
+    "timeDisabled" : "centang hari untuk mengaktifkan jadwal ini",
+    "create" : "buat shift baru",
+    "update" : "perbarui shift",
+    "dailySettings" : "Pengaturan harian",
+    "deleteHeader" : "hapus shift",
+    "deleteMessage" : "Apakah kamu yakin menghapus shift ini? Data ini akan dihapus secara permanen dan tidak bisa dikembalikan!"
+  },
+  "description" : "deskripsi",
+  "setAsDefault" : "atur sebagai default",
+
+  "attendanceOverview" : "ringkasan presensi",
+  "clock" : "isi presensi",
+
+  "present" : "hadir",
+  "absent" : "absen",
+  "earlyLeave" : "lebih awal",
+  "late" : "terlambat",
+
+  "Present" : "hadir",
+  "Absent" : "absen",
+  "Early Leave" : "lebih awal",
+  "Late" : "terlambat",
+
+  "hrs" : "jam",
+
+  "search" : "cari",
+  "active" : "aktif",
+  "inactive" : "non aktif",
+  "next" : "selanjutnya",
+  "previous" : "sebelumnya",
+  "page" : "halaman",
+  "of" : "dari",
+  "monday":  "senin",
+  "tuesday":  "selasa",
+  "wednesday":  "rabu",
+  "thursday":  "kamis",
+  "friday":  "jumat",
+  "saturday":  "sabtu",
+  "sunday":  "minggu",
+  "cancel" : "batal",
+  "deleteMessage": "Apakah kamu yakin menghapus data ini? Data ini akan dihapus secara permanen dan tidak bisa dikembalikan!",
+  "deleteHeader" : "konfirmasi hapus"
+}

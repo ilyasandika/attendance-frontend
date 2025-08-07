@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
-import { enUS } from "date-fns/locale";
+import { enUS, id } from "date-fns/locale";
+import {useTranslation} from "react-i18next";
+import {capitalize} from "../../utils/helper.js";
 
 const RecentUserCard = () => {
+    const {t} = useTranslation();
     const [recentUsers, setRecentUsers] = useState([]);
 
     useEffect(() => {
@@ -26,7 +29,7 @@ const RecentUserCard = () => {
 
     return (
         <div className="bg-white p-8 rounded-xl w-full max-w-md">
-            <h3 className="text-md font-semibold mb-3 text-left">Recent User Registration</h3>
+            <h3 className="text-md font-semibold mb-3 text-left">{capitalize(t("user.recent"))}</h3>
             <hr className="text-primary/20" />
             <div className="space-y-6 mt-4">
                 {recentUsers.map((user) => (
@@ -36,7 +39,7 @@ const RecentUserCard = () => {
                             <span className="text-sm">{user.employeeId}</span>
                         </div>
                         <span className="text-gray-500">
-                            {formatDistanceToNow(new Date(user.createdAt * 1000), { addSuffix: true, locale: enUS })}
+                            {formatDistanceToNow(new Date(user.createdAt * 1000), { addSuffix: true, locale: import.meta.env.VITE_LOCALE === "id" ? id : enUS })}
                         </span>
                     </div>
                 ))}

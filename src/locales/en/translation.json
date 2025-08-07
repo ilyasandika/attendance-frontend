@@ -1,0 +1,134 @@
+{
+  "date" : "tanggal",
+  "action" : "action",
+  "search" : "search",
+  "active" : "active",
+  "inactive" : "inactive",
+  "next" : "next",
+  "previous" : "previous",
+  "page" : "page",
+  "of" : "of",
+  "clockIn" : "clock in",
+  "clockOut" : "clock out",
+  "workHours" : "work hours",
+
+  "attendanceOverview" : "attendance overview",
+  "clock" : "clock in/out",
+
+  "present" : "present",
+  "absent" : "absent",
+  "earlyLeave" : "early leave",
+  "late" : "late",
+
+  "Present" : "present",
+  "Absent" : "absent",
+  "Early Leave" : "early leave",
+  "Late" : "late",
+
+  "hrs" : "hrs",
+
+  "name" : "name",
+  "role" : "role",
+  "department" : "department",
+  "dateCreated" : "date created",
+  "accountStatus" : "account status",
+  "select" : "select",
+  "male" : "male",
+  "female" : "female",
+  "address" : "address",
+
+
+  "user" : {
+    "list" : "user list",
+    "add" : "add user",
+    "edit" : "edit user data",
+    "username" : "username",
+    "deleteMessage" : "Are you sure want to delete this account? All data will be permanently removed. This action cannot be undone.",
+    "deleteHeader" : "delete account",
+    "uploadAPhoto" : "upload a photo",
+    "confirmPasswordRequired" : "confirm password is required",
+    "confirmPasswordNotMatch" : "passwords do not match",
+    "employeeId" : "employee ID",
+    "fullName" : "full name",
+    "gender" : "gender",
+    "phoneNumber" : "phone number",
+    "birthDate" : "birth date",
+    "workLocation" : "work location",
+    "password" : "password",
+    "confirmPassword" : "confirm password",
+    "credential" : "credential",
+    "role" : "role",
+    "department" : "department",
+    "contactInformation" : "contact information",
+    "biography": "biography",
+    "recent" : "recent user registration",
+    "statisticByDepartment" : "User Statistic by Department"
+  },
+
+
+  "departments" : {
+    "list" : "department list",
+    "add" : "add departemen",
+    "edit" : "edit departemen",
+    "name" : "department name",
+    "create" : "create department",
+    "inUse" : "cannot delete the department that being use by user",
+    "update" : "update department"
+  },
+
+  "roles" : {
+    "list" : "role list",
+    "add" : "add role",
+    "edit" : "edit role",
+    "name" : "role name",
+    "create" : "create role",
+    "update" : "update role",
+    "inUse" : "cannot delete the role that being use by user"
+  },
+
+
+  "shift" : {
+    "list" : "shift list",
+    "add" : "add shift",
+    "dayOff" : "day off",
+    "edit" : "edit shift",
+    "name" : "shift name",
+    "inUse" : "cannot delete the shift that being use by user schedules",
+    "timeDisabled": "Check the days to enable this schedule",
+    "create" : "create new shift",
+    "update" : "update shift",
+    "dailySettings" : "daily settings",
+    "deleteHeader" : "delete shift",
+    "deleteMessage" : "Are you sure want to delete this shift? All data will be permanently removed. This action cannot be undone."
+  },
+
+  "locations" : {
+    "name" : "location name",
+    "add" : "add location",
+    "list" : "location list",
+    "inUse" : "cannot delete location that is used in user schedule",
+    "edit" : "edit location",
+    "update" : "update location",
+    "selectLocationOnMap" : "select location on map",
+    "create" : "create location",
+    "radius" : "radius"
+  },
+
+  "schedules" : {
+    "list" : "assignments list"
+  },
+
+  "dailySettings" : "Pengaturan harian",
+  "setAsDefault" : "set as default",
+  "description" : "description",
+  "monday":  "monday",
+  "tuesday":  "tuesday",
+  "wednesday":  "wednesday",
+  "thursday":  "thursday",
+  "friday":  "friday",
+  "saturday":  "saturday",
+  "sunday":  "sunday",
+  "cancel" : "cancel",
+  "deleteMessage" : "Are you sure want to delete this data? All data will be permanently removed. This action cannot be undone.",
+  "deleteHeader" : "confirm delete"
+}

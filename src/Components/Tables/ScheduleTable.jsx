@@ -1,38 +1,54 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../../assets/icons/edit.svg";
-import trash from "../../assets/icons/trash.svg";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useSearchParams } from "react-router-dom";
+import {capitalize, updateSearchParams} from "../../utils/helper.js";
+
+import scheduleServices from "../../services/scheduleService.js";
+import {useTranslation} from "react-i18next";
+import Action from "../Button/Action.jsx";
 
 const ScheduleTable = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(true);
     const [schedules, setSchedules] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(searchParams.get("schedules_search") || "");
+    const currentPage = Number(searchParams.get("schedules_page")) || 1;
+    const {t} = useTranslation();
+    const fetchSchedules = useCallback(async () => {
+        try {
+            const response = await scheduleServices.getSchedules(currentPage, search);
+
+            setSchedules(response.data.payload.data);
+            setTotalPages(response.data.payload.meta.lastPage || 1);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [currentPage, search]);
 
     useEffect(() => {
+        if (!searchParams.get("schedules_page")) {
+            setSearchParams((prevParams) => {
+                prevParams.set("schedules_page", 1);
+                return prevParams;
+            });
+        }
         const getSchedules = setTimeout(() => {
+            setIsLoading(true);
             fetchSchedules();
-        }, 300);
+        }, 500);
         return () => clearTimeout(getSchedules);
     }, [currentPage, search]);
 
-    const fetchSchedules = useCallback(async () => {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) return console.error("No token found");
-
-            const response = await axios.get(`http://localhost:8000/api/schedules?page=${currentPage}&search=${search}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            setSchedules(response.data.data.data);
-            setTotalPages(response.data.totalPages || 1);
-        } catch (error) {
-            console.error("Error fetching schedules:", error);
-        }
-    }, [currentPage, search]);
+    useEffect(() => {
+        updateSearchParams(setSearchParams, currentPage, search, {
+            pageName: "schedules_page",
+            searchName: "schedules_search",
+        });
+    }, [search]);
 
     const columns = useMemo(
         () => [
@@ -42,14 +58,14 @@ const ScheduleTable = () => {
             },
             {
                 key: "employeeName",
-                label: "Name",
+                label: capitalize(t('user.fullName')),
             },
             {
                 key: "employeeRole",
                 label: (
                     <>
-                        Role/ <br />
-                        Department
+                        {capitalize(t('role'))}/ <br />
+                        {capitalize(t('department'))}
                     </>
                 ),
                 render: (_, row) => (
@@ -65,43 +81,40 @@ const ScheduleTable = () => {
             },
             {
                 key: "employeeWorkLocation",
-                label: "Location",
+                label: capitalize(t('location')),
             },
             {
                 key: "action",
-                label: "Action",
+                label: capitalize(t('action')),
                 render: (_, row) => (
-                    <div className="flex">
-                        <button className="mr-6 cursor-pointer">
-                            <img src={edit} className="w-4" />
-                        </button>
-                        <button className="cursor-pointer">
-                            <img src={trash} className="w-4" />
-                        </button>
-                    </div>
+                    <Action edit={{to:`/users/edit/${row.employeeId}`}} />
                 ),
             },
         ],
         []
     );
 
-    let header = {
-        title: "Schedule List",
-        button: {
-            link: "/",
-            text: "Add User",
-        },
+    const header = {
+        title: capitalize(t('schedules.list')),
+        // button: {
+        //     link: "/schedules/add",
+        //     text: "Add Schedule",
+        // },
+    };
+
+    const pagination = {
         setSearch,
-        setTotalPages,
-        setCurrentPage,
+        setSearchParams,
         search,
+        searchParams,
         totalPages,
         currentPage,
+        pageName: "schedules_page",
     };
 
     return (
         <>
-            <DataTable header={header} columns={columns} items={schedules} />
+            <DataTable header={header} columns={columns} items={schedules} pagination={pagination} isLoading={isLoading} />
         </>
     );
 };

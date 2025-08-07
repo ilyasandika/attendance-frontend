@@ -2,12 +2,16 @@ import { useCallback, useEffect, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../../assets/icons/edit.svg";
 import trash from "../../assets/icons/trash.svg";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { updateSearchParams } from "../../utils/helper.js";
-import userService from "../../services/userService.js";
-import axios from "axios";
+import { Link, useSearchParams } from "react-router-dom";
+import {capitalize, updateSearchParams} from "../../utils/helper.js";
+import userServices from "../../services/userServices.js";
+import {useTranslation} from "react-i18next";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 
 const UserTable = () => {
+    const { t } = useTranslation();
+    const [idDelete, setIdDelete] = useState(null);
+    const [confirmModal, setConfirmModal] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
@@ -18,7 +22,7 @@ const UserTable = () => {
 
     const fetchUsers = useCallback(async () => {
         try {
-            const response = await userService.getUsers(currentPage, search);
+            const response = await userServices.getUsers(currentPage, search);
 
             setUsers(response.data.payload.users);
             setTotalPages(response.data.payload.meta.lastPage || 1);
@@ -31,11 +35,13 @@ const UserTable = () => {
 
     const deleteUser = async (id) => {
         try {
-            await userService.deleteUser(id);
+            await userServices.deleteUser(id);
             alert("Success delete a user");
+            setConfirmModal(false);
             fetchUsers();
         } catch (error) {
             console.error(error);
+            setConfirmModal(false);
         }
     };
 
@@ -63,52 +69,55 @@ const UserTable = () => {
             label: "ID",
         },
         {
-            key: "employeeName",
-            label: "Name",
+            key: "name",
+            label: capitalize(t('name')),
         },
         {
             key: "employeeRole",
             label: (
                 <>
-                    Role/ <br />
-                    Department
+                    {capitalize(t('role'))} / <br />
+                    {capitalize(t('department'))}
                 </>
             ),
             render: (_, row) => (
                 <div className="flex flex-col">
-                    <span className="font-semibold">{row.employeeRole}</span>
-                    <span className="text-sm text-gray-500">{row.employeeDepartment}</span>
+                    <span className="font-semibold">{row.role}</span>
+                    <span className="text-sm text-gray-500">{row.department}</span>
                 </div>
             ),
         },
         {
-            key: "employeeEmail",
+            key: "email",
             label: "Email",
         },
         {
             key: "dateCreated",
-            label: "Date Created",
+            label: capitalize(t('dateCreated')),
             render: (val) => new Date(val * 1000).toLocaleString("id-ID"),
         },
         {
-            key: "accountStatus",
-            label: "Account Status",
+            key: "status",
+            label: capitalize(t('accountStatus')),
             render: (val) =>
                 val === 1 ? (
-                    <span className="bg-green-400/10 px-4 py-2 rounded-lg text-green-400 font-bold">Active</span>
+                    <span className="bg-green-400/10 text-green-400 px-4 py-2 rounded-lg font-bold">{capitalize(t('active'))}</span>
                 ) : (
-                    <span className="bg-gray-400/10 px-4 py-2 rounded-lg text-gray-400 font-bold">Inactive</span>
+                    <span className="bg-gray-400/10 px-4 py-2 rounded-lg text-gray-400 font-bold">{capitalize(t('inactive'))}</span>
                 ),
         },
         {
             key: "id",
-            label: "Action",
+            label: capitalize(t('action')),
             render: (_, row) => (
                 <div className="flex">
                     <Link to={`/users/edit/${row.id}`} className="mr-6 cursor-pointer">
                         <img src={edit} className="w-4" />
                     </Link>
-                    <button className="cursor-pointer" onClick={() => deleteUser(row.id)}>
+                    {/*<button className="cursor-pointer" onClick={() => deleteUser(row.id)}>*/}
+                    {/*    <img src={trash} className="w-4" />*/}
+                    {/*</button>*/}
+                    <button className="cursor-pointer" onClick={() =>{ setConfirmModal(true); setIdDelete(row.id)}}>
                         <img src={trash} className="w-4" />
                     </button>
                 </div>
@@ -117,10 +126,10 @@ const UserTable = () => {
     ];
 
     const header = {
-        title: "User List",
+        title: capitalize(t('user.list')),
         button: {
             link: "/users/add",
-            text: "Add User",
+            text: capitalize(t('user.add')),
         },
     };
 
@@ -131,11 +140,13 @@ const UserTable = () => {
         searchParams,
         totalPages,
         currentPage,
+        pageName: "page",
     };
 
     return (
         <>
             <DataTable header={header} columns={columns} items={users} pagination={pagination} isLoading={isLoading} />
+             {confirmModal && <ConfirmModal isOpen={confirmModal} onClose={() => setConfirmModal(false) } onConfirm={() => deleteUser(idDelete)} message={t('user.deleteMessage')} header={capitalize(t('user.deleteHeader'))}/>}
         </>
     );
 };

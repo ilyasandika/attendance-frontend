@@ -1,12 +1,16 @@
-const GenderDropdown = ({ handleChange, value = undefined }) => {
+import {capitalize} from "../../utils/helper.js";
+import {useTranslation} from "react-i18next";
+
+const GenderDropdown = ({ handleChange, name, value = undefined, error = null}) => {
+    const {t} = useTranslation();
     return (
         <div className="flex flex-col">
-            <label htmlFor="employeeGender" className="text-sm font-medium">
-                Gender
+            <label htmlFor="employeeGender" className="text-sm font-semibold">
+                {capitalize(t("user.gender"))}
             </label>
             <select
                 id="employeeGender"
-                name="employeeGender"
+                name={name}
                 onChange={handleChange}
                 value={value ? value : undefined}
                 className="input border border-primary/10 mt-2 rounded-md py-2 px-4 text-sm">
@@ -14,6 +18,8 @@ const GenderDropdown = ({ handleChange, value = undefined }) => {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
             </select>
+
+            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
         </div>
     );
 };
