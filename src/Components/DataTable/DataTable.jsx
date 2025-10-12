@@ -13,7 +13,7 @@ const DataTable = ({ header, columns, items, pagination, isLoading, onClick = nu
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">{header.title}</h2>
                 <div className="flex gap-2">
-                    {pagination.search &&
+                    {pagination &&
                         <input
                             type="text"
                             placeholder={`${capitalize(t('search'))} ...` }
