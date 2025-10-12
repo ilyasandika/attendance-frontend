@@ -54,6 +54,7 @@ const UpdateUserForm = () => {
         linkedin: "",
         telegram: "",
         photo: null,
+        roleAccount : ""
     });
 
     useEffect(() => {
@@ -162,7 +163,6 @@ const UpdateUserForm = () => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
             });
     };
-
     return (
         <>
             <div className="bg-white px-10 py-8 rounded-xl w-full">
@@ -239,13 +239,37 @@ const UpdateUserForm = () => {
                                             />
                                             :
                                             formData.status ? (
-
                                                 <div>
                                                     <h2 className="mb-4 text-sm font-semibold">Account Status</h2>
                                                     <span className="bg-green-400/10 text-green-400 px-4 py-2 rounded-lg font-bold">{capitalize(t("active"))}</span>
                                                 </div>
                                             ) : (
                                                 <div><span className="bg-gray-400/10 px-4 py-2 rounded-lg text-gray-400 font-bold">{capitalize(t("inactive"))}</span></div>
+                                            )
+
+                                    }
+
+                                    {
+                                        utilServices.isAdmin() ?
+                                            <Dropdown
+                                                name="roleAccount"
+                                                label={capitalize(t("roleAccount"))}
+                                                handleChange={handleChange}
+                                                items={[{ id: "admin", name: capitalize(t("admin")) }, { id: "employee", name: capitalize(t("employee")) }]}
+                                                defaultValue={formData.roleAccount}
+                                                error={fieldErrors?.roleAccount}
+                                                disabled={utilServices.isEmployee()}
+                                                disabledDisplay={utilServices.isEmployee()}
+                                            />
+                                            :
+                                            formData.roleAccount === "admin" ? (
+                                                <div>
+                                                    <h2 className="mb-4 text-sm font-semibold">{capitalize(t("roleAccount"))}</h2>
+                                                    <span className="bg-green-400/10 text-green-400 px-4 py-2 rounded-lg font-bold">{capitalize(t(formData.roleAccount))}</span>
+                                                </div>
+                                            ) : (
+                                                <div><h2 className="mb-4 text-sm font-semibold">{capitalize(t("roleAccount"))}</h2>
+                                                    <span className="bg-gray-400/10 px-4 py-2 rounded-lg text-gray-400 font-bold">{capitalize(t(formData.roleAccount))}</span></div>
                                             )
 
                                     }

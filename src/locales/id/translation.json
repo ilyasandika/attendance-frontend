@@ -6,7 +6,9 @@
   "minutes" : "menit",
   "users" : "pengguna",
   "holiday" : "hari libur",
+  "roleAccount" : "hak akses akun",
   "userSuccessDelete" : "user berhasil dihapus",
+  "employee" : "karyawan",
   "shifts" : "jadwal kerja",
   "addLeave" : "buat pengajuan cuti",
   "successDeleteLeave" : "pengajuan cuti berhasil dihapus",
@@ -117,6 +119,7 @@
     "confirmPasswordRequired" : "konfirmasi kata sandi tidak boleh kosong",
     "confirmPasswordNotMatch" : "kata sandi tidak sama",
     "credential" : "kredensial",
+
     "employeeId" : "ID karyawan",
     "fullName" : "nama lengkap",
     "gender" : "jenis kelamin",

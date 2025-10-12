@@ -28,6 +28,7 @@ const CreateUserForm = () => {
         shiftId: "",
         locationId: "",
         password: "",
+        roleAccount : "employee",
         confirmPassword: "",
     });
 
@@ -95,6 +96,7 @@ const CreateUserForm = () => {
         if (requestData.birthDate) {
             requestData.birthDate = Math.floor(new Date(requestData.birthDate).getTime() / 1000);
         }
+        console.log(requestData)
         await userServices.createUser(requestData)
             .then(res => {
                 navigate("/users", { state: { success: capitalize(t("successCreateUser"), false) } });
@@ -230,6 +232,30 @@ const CreateUserForm = () => {
                          handleChange={handleChange}
                          value={formData.confirmPassword}
                          error={fieldErrors?.confirmPassword} />
+            </ItemWrapper>
+
+            <ItemWrapper header={capitalize(t("user.credential"))} isLast={true}>
+                <Dropdown
+                    id="roleAccount"
+                    name="roleAccount"
+                    value={formData.roleAccount}
+                    label={capitalize(t("roleAccount"))}
+                    handleChange={handleChange}
+                    items={[
+                        {
+                            id: "admin",
+                            name: "Admin",
+                        },
+                        {
+                            id: "employee",
+                            name: capitalize(t("employee")),
+                        }
+
+                    ]}
+                    placeholder={`${capitalize(t("select"))} ${capitalize(t("roleAccount"))}`}
+                    error={fieldErrors?.roleAccount}
+                    defaultValue={formData.roleAccount}
+                />
             </ItemWrapper>
         </FormWrapper>
     );
