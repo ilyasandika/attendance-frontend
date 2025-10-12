@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../../assets/icons/edit.svg";
 import trash from "../../assets/icons/trash.svg";
-import { Link, useSearchParams } from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {capitalize, updateSearchParams} from "../../utils/helper.js";
 import locationServices from "../../services/locationServices.js";
 import Action from "../Button/Action.jsx";
@@ -16,6 +16,7 @@ const LocationTable = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState(searchParams.get("locations_search") || "");
     const {t} = useTranslation();
+    const navigate = useNavigate();
     const currentPage = Number(searchParams.get("locations_page")) || 1;
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -33,13 +34,17 @@ const LocationTable = () => {
     }, [currentPage, search]);
 
     const deleteLocation = async (id) => {
-        try {
-            await locationServices.deleteLocation(id);
-            alert("Successfully deleted a location");
-            fetchLocations();
-        } catch (error) {
-            console.error("Delete location error:", error);
-        }
+              await locationServices.deleteLocation(id)
+            .then(() => {
+                navigate(location.pathname, { state: { success: capitalize(t("successDeleteLocation"), false) } });
+                fetchLocations();
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(()=>{
+                setDeleteModal(false);
+            })
     };
 
     useEffect(() => {

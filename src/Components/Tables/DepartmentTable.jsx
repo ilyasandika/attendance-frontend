@@ -3,7 +3,7 @@ import DataTable from "../DataTable/DataTable.jsx";
 import edit from "../../assets/icons/edit.svg";
 import trash from "../../assets/icons/trash.svg";
 import show from "../../assets/icons/show.svg";
-import { Link, useSearchParams } from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {capitalize, updateSearchParams} from "../../utils/helper.js";
 import departmentServices from "../../services/departmentServices.js";
 import utilServices from "../../services/utilServices.js";
@@ -21,6 +21,7 @@ const DepartmentTable = () => {
     const [deleteId, setDeleteId] = useState(null);
     const currentPage = Number(searchParams.get("departments_page")) || 1;
     const {t} = useTranslation();
+    const navigate = useNavigate();
     const fetchDepartments = useCallback(async () => {
         try {
             const response = await departmentServices.getDepartments(currentPage, search);
@@ -34,15 +35,19 @@ const DepartmentTable = () => {
     }, [currentPage, search]);
 
     const deleteDepartment = async (id) => {
-        try {
-            await departmentServices.deleteDepartment(id);
-            alert("Success delete department");
-            setDeleteModal(false);
-            fetchDepartments();
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
+        await departmentServices.deleteDepartment(id)
+            .then(res => {
+                setDeleteModal(false);
+                fetchDepartments();
+                navigate(location.pathname, {
+                    state: {success: capitalize(t("successDeleteDepartment"), false)}
+                })
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
 
     useEffect(() => {
         if (!searchParams.get("departments_page")) {

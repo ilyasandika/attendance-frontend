@@ -4,7 +4,7 @@ import { capitalize } from "../../utils/helper.js";
 import { useTranslation } from "react-i18next";
 import Button from "../../Components/Button/Button.jsx";
 
-const RoleForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
+const DepartmentOrRoleForm = ({ mode = "create", type ="department", initialValues = {}, onSubmit, fieldErrors, setErrors, removeErrorsByField}) => {
     const { t } = useTranslation();
 
     const [formData, setFormData] = useState({
@@ -29,6 +29,10 @@ const RoleForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             ...prev,
             [name]: type === "checkbox" ? checked : value,
         }));
+
+        if(fieldErrors[name]) {
+            removeErrorsByField(name);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -39,22 +43,24 @@ const RoleForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
     return (
         <div className="bg-white p-12 rounded-xl w-full text-left">
             <h3 className="text-lg text-left font-semibold mb-4">
-                {capitalize(t(mode === "edit" ? "roles.edit" : "roles.add"))}
+                {capitalize(t(mode === "edit" ? "departments.edit" : "departments.add"))}
             </h3>
             <hr className="text-primary/20" />
             <form onSubmit={handleSubmit} className="space-y-10 mt-8">
                 <div className="flex flex-col gap-4">
                     <TextBox
-                        label={capitalize(t("roles.name"))}
+                        label={capitalize(t("departments.name"))}
                         name="name"
                         value={formData.name}
                         handleChange={handleChange}
+                        error={fieldErrors?.name}
                     />
                     <TextBox
                         label={capitalize(t("description"))}
                         name="description"
                         value={formData.description}
                         handleChange={handleChange}
+                        error={fieldErrors?.description}
                     />
                     <div className="flex items-center gap-2">
                         <input
@@ -77,8 +83,8 @@ const RoleForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                     <Button
                         text={
                             mode === "edit"
-                                ? capitalize(t("roles.update"))
-                                : capitalize(t("roles.create"))
+                                ? capitalize(t(type === "department" ? "departments.update" : "roles.update"))
+                                : capitalize(t(type === "department" ? "departments.create" : "roles.create"))
                         }
                     />
                 </div>
@@ -87,4 +93,4 @@ const RoleForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
     );
 };
 
-export default RoleForm;
+export default DepartmentOrRoleForm;

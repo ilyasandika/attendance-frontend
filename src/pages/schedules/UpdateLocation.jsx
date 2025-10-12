@@ -1,42 +1,53 @@
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { useEffect, useState } from "react";
 import locationServices from "../../services/locationServices";
 import LocationForm from "../forms/LocationForm";
+import {useErrors} from "../../hooks/useErrors.jsx";
+import {useTranslation} from "react-i18next";
+import {data} from "autoprefixer";
+import {capitalize} from "../../utils/helper.js";
 
 const UpdateLocationPage = () => {
     const { id } = useParams();
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const {fieldErrors, setErrors, removeErrorsByField} = useErrors();
+    const navigate = useNavigate();
+    const {t} = useTranslation();
+
     const handleSubmit = async (data) => {
-        try {
-            await locationServices.updateLocation(id, data);
-            alert("Location updated successfully!");
-            window.location.href = "/shifts-locations";
-        } catch (err) {
-            console.error("Update Error:", err);
-        }
+              await locationServices.updateLocation(id, data)
+            .then(res => {
+                navigate("/shifts-locations", {state : {
+                        success: capitalize(t("successUpdateLocation"))
+                    }})
+            })
+            .catch(e => {
+                setErrors(e);
+            })
     };
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await locationServices.getLocationById(id);
-                const data = res.data.payload;
-                setLocation({
-                    name: data.name || "",
-                    description: data.description || "",
-                    radius: data.radius || "",
-                    address: data.address || "",
-                    latitude: data.latitude?.toString() || "-6.2",
-                    longitude: data.longitude?.toString() || "106.8",
-                    default: data.default || false,
-                });
-            } catch (err) {
-                console.error("Fetch Error:", err);
-            } finally {
-                setLoading(false);
-            }
+            await locationServices.getLocationById(id)
+                .then(res => {
+                    setLocation({
+                        name: res.data.payload.name || "",
+                        description: res.data.payload.description || "",
+                        radius: res.data.payload.radius || "",
+                        address: res.data.payload.address || "",
+                        latitude: res.data.payload.latitude?.toString() || "-6.2",
+                        longitude: res.data.payload.longitude?.toString() || "106.8",
+                        default: res.data.payload.default || false,
+                    });
+                })
+                .catch(e => {
+                    console.error(e);
+                })
+                .finally(_ => {
+                    setLoading(false);
+                })
         };
 
         fetchData();
@@ -44,7 +55,13 @@ const UpdateLocationPage = () => {
 
     if (loading) return <div className="p-12">Loading...</div>;
 
-    return <LocationForm mode="edit" initialValues={location} onSubmit={handleSubmit} />;
+    return <LocationForm mode="edit"
+                         initialValues={location}
+                         onSubmit={handleSubmit}
+                         fieldErrors = {fieldErrors}
+                         setErrors = {setErrors}
+                         removeErrorsByField = {removeErrorsByField}
+    />;
 };
 
 export default UpdateLocationPage;

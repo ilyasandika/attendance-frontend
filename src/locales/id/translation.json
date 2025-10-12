@@ -9,6 +9,17 @@
   "roleAccount" : "hak akses akun",
   "userSuccessDelete" : "user berhasil dihapus",
   "employee" : "karyawan",
+
+  "successCreateRole" : "jabatan berhasil dibuat",
+  "successDeleteRole" : "jabatan berhasil dihapus",
+  "successUpdateRole" : "jabatan berhasil diperbarui",
+
+  "successCreateDepartment" : "departemen berhasil dibuat",
+  "successDeleteDepartment" : "departemen berhasil dihapus",
+  "successUpdateDepartment" : "departemen berhasil diperbarui",
+  "successCreateLocation" : "lokasi berhasil dibuat",
+  "successUpdateLocation" : "lokasi berhasil diperbarui",
+  "successDeleteLocation" : "lokasi berhasil dihapus",
   "shifts" : "jadwal kerja",
   "addLeave" : "buat pengajuan cuti",
   "successDeleteLeave" : "pengajuan cuti berhasil dihapus",

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "../../Components/Button/Button.jsx";
 
-const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
+const LocationForm = ({ mode = "create", initialValues = {}, onSubmit, fieldErrors, removeErrorsByField, setErrors }) => {
     const { t } = useTranslation();
 
 
@@ -36,6 +36,10 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             ...form,
             [name]: type === "checkbox" ? checked : value,
         });
+
+        if(fieldErrors[name]) {
+            removeErrorsByField(name);
+        }
     };
 
     const handleLocationChange = ([lat, lng]) => {
@@ -44,6 +48,15 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             latitude: lat,
             longitude: lng,
         });
+
+        if(fieldErrors["latitude"]) {
+            removeErrorsByField("latitude");
+        }
+
+        if(fieldErrors["longitude"]) {
+            removeErrorsByField("longitude");
+        }
+
     };
 
     const handleSubmit = (e) => {
@@ -53,6 +66,8 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             latitude: parseFloat(form.latitude).toFixed(7),
             longitude: parseFloat(form.longitude).toFixed(7),
         });
+
+
     };
 
     return (
@@ -71,6 +86,7 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                                     name="name"
                                     value={form.name}
                                     handleChange={handleChange}
+                                    error={fieldErrors?.name}
                                 />
                             </div>
                             <div className="flex-1">
@@ -80,6 +96,7 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                                     value={form.radius}
                                     handleChange={handleChange}
                                     type="number"
+                                    error={fieldErrors?.radius}
                                 />
                             </div>
                         </div>
@@ -89,15 +106,18 @@ const LocationForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                             value={form.description}
                             handleChange={handleChange}
                             type="text"
+                            error={fieldErrors?.description}
                         />
                         <div>
                             <label className="block text-sm font-medium mb-1">{capitalize(t('address'))}</label>
-                            <textarea
+                            <TextBox
+                                type="textarea"
                                 name="address"
                                 value={form.address}
-                                onChange={handleChange}
-                                rows={6}
-                                className="w-full border px-3 py-2 rounded-md"
+                                handleChange={handleChange}
+                                rows={20}
+                                className="w-full border px-3 h-40 py-2  rounded-md"
+                                error={fieldErrors?.address}
                             />
                         </div>
                         <div className="flex items-center gap-2 pt-2">

@@ -66,9 +66,9 @@ const TextBox = ({
                         readOnly={readOnly}
                         placeholder={placeholder}
                         onChange={handleChange}
-                        value={value ?? ""}
+                        value={value}
                         className={`mt-2 border rounded-md p-2 resize-none ${inputBaseClass} ${error ? "border-red-500" : "border-primary/20"} ${className}`}
-                    >{value}</textarea>
+                    />
                 }
 
 

@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
-import { useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import { capitalize, updateSearchParams } from "../../utils/helper.js";
 import roleServices from "../../services/roleServices.js";
 import utilServices from "../../services/utilServices.js";
 import { useTranslation } from "react-i18next";
 import Action from "../Button/Action.jsx";
 import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import departmentServices from "../../services/departmentServices.js";
 
 const RoleTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -18,7 +19,7 @@ const RoleTable = () => {
     const [deleteId, setDeleteId] = useState(null);
     const currentPage = Number(searchParams.get("roles_page")) || 1;
     const { t } = useTranslation();
-
+    const navigate = useNavigate();
     const fetchRoles = useCallback(async () => {
         try {
             const response = await roleServices.getRoles(currentPage, search);
@@ -32,14 +33,17 @@ const RoleTable = () => {
     }, [currentPage, search]);
 
     const deleteRole = async (id) => {
-        try {
-            await roleServices.deleteRole(id);
-            alert("Success delete role");
-            setDeleteModal(false);
-            fetchRoles();
-        } catch (error) {
-            console.error(error);
-        }
+               await roleServices.deleteRole(id)
+            .then(res => {
+                setDeleteModal(false);
+                fetchRoles();
+                navigate(location.pathname, {
+                    state: {success: capitalize(t("successDeleteRole"), false)}
+                })
+            })
+            .catch(error => {
+                console.error(error)
+            })
     };
 
     useEffect(() => {
