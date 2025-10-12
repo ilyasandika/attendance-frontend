@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import { enUS, id } from "date-fns/locale";
 import {useTranslation} from "react-i18next";
 import {capitalize} from "../../utils/helper.js";
+import userServices from "../../services/userServices.js";
 
 const RecentUserCard = () => {
     const {t} = useTranslation();
@@ -14,17 +15,13 @@ const RecentUserCard = () => {
     }, []);
 
     const fetchRecentUsers = async () => {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) return console.error("No token found");
-
-            const response = await axios.get("http://localhost:8000/api/users/recent", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setRecentUsers(response.data.payload);
-        } catch (error) {
-            console.error("Error fetching recent users:", error);
-        }
+        await userServices.getRecentUserRegistered()
+            .then(res => {
+                setRecentUsers(res.data.payload)
+            })
+            .catch(err => {
+                console.error(err)
+            })
     };
 
     return (

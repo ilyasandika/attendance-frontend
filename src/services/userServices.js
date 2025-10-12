@@ -11,14 +11,9 @@ const userServices = {
     }),
     getUserById: async (id) => api.get(`/users/${id}`),
     deleteUser: async (id) =>  await api.delete(`/users/${id}`),
-    getTotalUserByDepartment : async () => {
-        try {
-            return await api.get(`/users/department`);
-        } catch (error) {
-            console.error("Error delete user: ", error);
-            throw error.response?.data?.errors || "Something went wrong";
-        }
-    }
+    getTotalUserByDepartment : async () => await api.get(`/users/department`),
+    getRecentUserRegistered : async () => await api.get(`/users/recent`),
+
 
 
 };

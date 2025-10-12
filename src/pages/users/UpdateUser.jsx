@@ -80,7 +80,7 @@ const UpdateUserForm = () => {
 
             const userData = userRes.data.payload;
             setDepartments(departmentsRes.data.payload || []);
-            setRoles(rolesRes.data.data || []);
+            setRoles(rolesRes.data.payload || []);
             setShifts(shiftsRes.data.payload || []);
             setLocations(locationsRes.data.payload || []);
             setPhoto(userData.photo);
@@ -98,6 +98,9 @@ const UpdateUserForm = () => {
             setLoading(false);
         }
     };
+
+    console.log(formData)
+    console.log(roles)
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
