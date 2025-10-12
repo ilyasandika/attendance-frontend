@@ -15,6 +15,8 @@ const Header = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
+    const locale = import.meta.env.VITE_LOCALE === "id" ? "id-ID" : "en-US";
+
     useEffect(() => {
         const fetchAllData = async () => {
             try {
@@ -53,7 +55,7 @@ const Header = () => {
             second: "2-digit",
             hour12: false,
         };
-        return date.toLocaleDateString("en-UK", options).replace(",", "");
+        return date.toLocaleDateString(locale, options).replace(",", "");
     };
 
     const handleLogout = async () => {
