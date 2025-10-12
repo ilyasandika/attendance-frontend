@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
-import { Link, useSearchParams } from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {capitalize, updateSearchParams} from "../../utils/helper.js";
 import holidayServices from "../../services/holidayServices.js";
 import Action from "../Button/Action.jsx";
@@ -15,8 +15,10 @@ const HolidayTable = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const {t} = useTranslation();
+    const navigate = useNavigate();
     const [search, setSearch] = useState(searchParams.get("holidays_search") || "");
     const currentPage = Number(searchParams.get("holidays_page")) || 1;
+    const LOCALE = import.meta.env.VITE_LOCALE === "en" ? "en-EN" : "id-ID";
 
     const fetchHolidays = useCallback(async () => {
         try {
@@ -31,15 +33,19 @@ const HolidayTable = () => {
     }, [currentPage, search]);
 
     const deleteHoliday = async (id) => {
-        try {
-            await holidayServices.deleteHoliday(id);
-            alert("Success delete holiday");
-             fetchHolidays();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setDeleteModal(false);
-        }
+
+        await holidayServices.deleteHoliday(id)
+            .then(res => {
+                navigate(location.pathname, {state : {success : capitalize(t("successDeleteHoliday"))}})
+                fetchHolidays();
+            })
+            .catch(error => {
+                console.error(error)
+            })
+            .finally(() => {
+                setDeleteModal(false);
+            }
+            )
     };
 
     useEffect(() => {
@@ -63,17 +69,17 @@ const HolidayTable = () => {
         () => [
             {
                 key: "name",
-                label: "Holiday Name",
+                label: capitalize(t("holiday name")),
                 render: (_, row) => <span className="font-semibold">{row.name}</span>,
             },
             {
                 key: "date",
-                label: "Date",
-                render: (_, row) => <span>{new Date(row.date).toLocaleDateString("en-EN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</span>,
+                label: capitalize(t("date")),
+                render: (_, row) => <span>{new Date(row.date).toLocaleDateString(LOCALE, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</span>,
             },
             {
                 key: "action",
-                label: "Action",
+                label: capitalize(t("action")),
                 render: (_, row) => (
                     <Action
                         edit={ {to: `/holidays/edit/${row.id}`} }
@@ -93,10 +99,10 @@ const HolidayTable = () => {
     );
 
     const header = {
-        title: "Holiday List",
+        title: capitalize(t("holiday list")),
         button: {
             link: "/holidays/add",
-            text: "Add Holiday",
+            text: capitalize(t("add holiday")),
         },
     };
 

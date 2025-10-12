@@ -13,6 +13,10 @@
   "roleAccount" : "account access",
   "year" : "tahun",
 
+  "successCreateHoliday" : "holiday has been created",
+  "successUpdateHoliday" : "holiday has been updated",
+  "successDeleteHoliday" : "holiday has been deleted",
+
   "successCreateRole" : "role has been created",
   "successUpdateRole" : "role has been updated",
   "successDeleteRole" : "role has been deleted",

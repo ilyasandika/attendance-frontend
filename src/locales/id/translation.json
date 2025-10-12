@@ -9,6 +9,16 @@
   "roleAccount" : "hak akses akun",
   "userSuccessDelete" : "user berhasil dihapus",
   "employee" : "karyawan",
+  "holiday list" : "daftar hari libur",
+  "holiday name" : "nama hari libur",
+  "add holiday" : "tambahkan hari libur",
+  "create holiday" : "buat hari libur",
+  "update holiday" : "edit hari libur",
+
+
+  "successCreateHoliday" : "hari libur berhasil dibuat",
+  "successDeleteHoliday" : "hari libur berhasil dihapus",
+  "successUpdateHoliday" : "hari libur berhasil diperbarui",
 
   "successCreateRole" : "jabatan berhasil dibuat",
   "successDeleteRole" : "jabatan berhasil dihapus",
