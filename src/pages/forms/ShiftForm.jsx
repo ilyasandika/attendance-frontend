@@ -3,6 +3,8 @@ import TextBox from "../../Components/Form/TextBox.jsx";
 import Button from "../../Components/Button/Button.jsx";
 import { capitalize } from "../../utils/helper.js";
 import { useTranslation } from "react-i18next";
+import {useErrors} from "../../hooks/useErrors.jsx";
+import {useParams} from "react-router-dom";
 
 const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -24,9 +26,10 @@ const generateDefaultDays = () => {
     }, {});
 };
 
-const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
+const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit, fieldErrors = null, setErrors, removeErrorsByField}) => {
     const { t } = useTranslation();
 
+    const {id} = useParams();
     const [shiftData, setShiftData] = useState({
         name: "",
         default: false,
@@ -35,6 +38,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
         ...generateDefaultDays(),
         ...initialValues,
     });
+
 
     useEffect(() => {
         if (initialValues && Object.keys(initialValues).length > 0) {
@@ -51,7 +55,13 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             ...shiftData,
             [name]: type === "checkbox" ? checked : value,
         });
+
+        if(fieldErrors[name]) {
+            removeErrorsByField(name);
+        }
     };
+
+
 
     const handleDayChange = (day, field, value) => {
         setShiftData((prev) => ({
@@ -65,7 +75,11 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(shiftData);
+        if (mode === "edit") {
+            onSubmit(id, shiftData);
+        } else {
+            onSubmit(shiftData);
+        }
     };
 
     return (
@@ -75,7 +89,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             </h3>
             <hr className="text-primary/20" />
             <form onSubmit={handleSubmit} className="space-y-10 mt-8">
-                <div className="flex items-end gap-4  justify-between">
+                <div className={`flex gap-4 items-end justify-between`}>
                     <div className="">
                         <TextBox
                             id="name"
@@ -83,6 +97,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                             name="name"
                             value={shiftData.name}
                             handleChange={handleInputChange}
+                            error={fieldErrors?.name}
                         />
                     </div>
                     <div className="flex-1">
@@ -92,6 +107,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                             name="description"
                             value={shiftData.description}
                             handleChange={handleInputChange}
+                            error={fieldErrors?.description}
                         />
                     </div>
                     <div>

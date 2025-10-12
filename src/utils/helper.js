@@ -126,6 +126,10 @@ const capitalize = (text, all = true) => {
     return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 
-export { getUserId, timestampToObject, getAuthToken, updateSearchParams, handlePageChange, formattedDate, getStatusColor, capitalize, minutesToHM};
+
+export { getUserId, timestampToObject, getAuthToken, updateSearchParams, handlePageChange, formattedDate, getStatusColor, capitalize, minutesToHM, scrollToTop};

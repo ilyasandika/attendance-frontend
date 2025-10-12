@@ -11,6 +11,8 @@
   "next" : "next",
   "year" : "tahun",
   "successCreateLeave" : "leave has been created",
+  "successCreateShift" : "shift has been created",
+  "successUpdateShift" : "shift has been updated",
   "successCreateUser" : "user has been registered",
   "successUpdateUser" : "user has been updated",
   "userSuccessDelete" : "user has been deleted",
