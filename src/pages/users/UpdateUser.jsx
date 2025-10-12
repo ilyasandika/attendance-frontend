@@ -15,6 +15,7 @@ import ImageCropModal from "../../Modal/ImageCropModal.jsx";
 import Button from "../../Components/Button/Button.jsx";
 import utilServices from "../../services/utilServices.js";
 import {useTranslation} from "react-i18next";
+import {useErrors} from "../../hooks/useErrors.jsx";
 
 const UpdateUserForm = () => {
     const {t} = useTranslation();
@@ -27,10 +28,11 @@ const UpdateUserForm = () => {
     const [photo, setPhoto] = useState(null);
     const [openCrop, setOpenCrop] = useState(false);
     const [rawImage, setRawImage] = useState(null);
-    const [errors, setErrors] = useState({});
     const { id } = useParams();
     const [userId, setUserId] = useState(id ?? "");
     const navigate = useNavigate();
+
+    const {fieldErrors, generalError, removeErrorsByField,setErrors, clearErrors} = useErrors()
 
     const [formData, setFormData] = useState({
         id: 0,
@@ -112,9 +114,10 @@ const UpdateUserForm = () => {
             }));
         }
 
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: null }));
+        if (fieldErrors[name]) {
+            removeErrorsByField(name);
         }
+
     };
 
     useEffect(() => {
@@ -145,17 +148,19 @@ const UpdateUserForm = () => {
             requestData.birthDate = Math.floor(new Date(requestData.birthDate).getTime() / 1000);
         }
 
-        try {
-            await userServices.updateUser(requestData);
-            alert("User updated successfully!");
-            window.location.href = "/users";
-        } catch (error) {
-            if (error && error.status === 422) {
-                setErrors(error.data.errors);
-            } else {
-                console.error("Error update user:", error);
-            }
-        }
+
+        await userServices.updateUser(requestData)
+            .then(res => {
+                navigate("/users", {
+                    state: {
+                        success: capitalize(t("successUpdateUser")),
+                    },
+                });
+            })
+            .catch(error => {
+                setErrors(error);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
     };
 
     return (
@@ -175,7 +180,7 @@ const UpdateUserForm = () => {
                                             previewPhotoUrl
                                                 ? previewPhotoUrl
                                                 : photo
-                                                    ? `${import.meta.env.VITE_API_URL}/storage/${photo}`
+                                                    ? photo
                                                     : defaultProfile
                                         }
                                         alt="Profile"
@@ -208,7 +213,8 @@ const UpdateUserForm = () => {
                                         name="password"
                                         handleChange={handleChange}
                                         type="password"
-                                        error={errors.password?.[0]}
+                                        value={formData?.password}
+                                        error={fieldErrors?.password}
                                     />
                                     <TextBox
                                         label={capitalize(t("user.confirmPassword"))}
@@ -216,7 +222,8 @@ const UpdateUserForm = () => {
                                         name="confirmPassword"
                                         handleChange={handleChange}
                                         type="password"
-                                        error={errors.confirmPassword?.[0]}
+                                        value={formData?.confirmPassword}
+                                        error={fieldErrors?.confirmPassword}
                                     />
                                     {
                                         utilServices.isAdmin() ?
@@ -226,7 +233,7 @@ const UpdateUserForm = () => {
                                                 handleChange={handleChange}
                                                 items={[{ id: 1, name: capitalize(t("active")) }, { id: 0, name: capitalize(t("inactive")) }]}
                                                 defaultValue={formData.status}
-                                                error={errors.status?.[0]}
+                                                error={fieldErrors?.status}
                                                 disabled={utilServices.isEmployee()}
                                                 disabledDisplay={utilServices.isEmployee()}
                                             />
@@ -251,10 +258,10 @@ const UpdateUserForm = () => {
                                 <div>
                                     <h4 className="text-md font-semibold mb-4">{capitalize(t("user.profileInformation"))}</h4>
                                     <div className="grid grid-cols-2 gap-x-18 gap-y-6">
-                                        <TextBox label={capitalize(t("user.employeeId"))} name="employeeId" value={formData.employeeId} handleChange={handleChange} error={errors.employeeId?.[0]} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
-                                        <TextBox label={capitalize(t("user.fullName"))} name="name" value={formData.name} handleChange={handleChange} error={errors.name?.[0]} />
-                                        <TextBox label={capitalize(t("user.birthDate"))} name="birthDate" type="date" value={formData.birthDate} handleChange={handleChange} error={errors.birthDate?.[0]} />
-                                        <GenderDropdown name="gender" handleChange={handleChange} value={formData.gender} error={errors.gender?.[0]} />
+                                        <TextBox label={capitalize(t("user.employeeId"))} name="employeeId" value={formData.employeeId} handleChange={handleChange} error={fieldErrors?.employeeId} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
+                                        <TextBox label={capitalize(t("user.fullName"))} name="name" value={formData.name} handleChange={handleChange} error={fieldErrors?.name} />
+                                        <TextBox label={capitalize(t("user.birthDate"))} name="birthDate" type="date" value={formData.birthDate} handleChange={handleChange} error={fieldErrors?.birthDate} />
+                                        <GenderDropdown name="gender" handleChange={handleChange} value={formData.gender} error={fieldErrors?.gender} />
                                     </div>
                                 </div>
 
@@ -262,10 +269,10 @@ const UpdateUserForm = () => {
                                 <div>
                                     <h4 className="text-md font-semibold mb-4">{capitalize(t("user.workInformation"))}</h4>
                                     <div className="grid grid-cols-2 gap-x-16 gap-y-6">
-                                        <Dropdown name="departmentId" label={capitalize(t("user.department"))} handleChange={handleChange} items={departments} defaultValue={formData.departmentId} error={errors.departmentId?.[0]} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
-                                        <Dropdown name="roleId" label={capitalize(t("user.role"))} handleChange={handleChange} items={roles} defaultValue={formData.roleId} error={errors.roleId?.[0]} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
-                                        <Dropdown name="shiftId" label={capitalize(t("Shift"))} handleChange={handleChange} items={shifts} defaultValue={formData.shiftId} error={errors.shiftId?.[0]} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
-                                        <Dropdown name="locationId" label={capitalize(t("user.workLocation"))} handleChange={handleChange} items={locations} defaultValue={formData.locationId} error={errors.locationId?.[0]} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
+                                        <Dropdown name="departmentId" label={capitalize(t("user.department"))} handleChange={handleChange} items={departments} defaultValue={formData.departmentId} error={fieldErrors?.departmentId} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
+                                        <Dropdown name="roleId" label={capitalize(t("user.role"))} handleChange={handleChange} items={roles} defaultValue={formData.roleId} error={fieldErrors?.roleId} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
+                                        <Dropdown name="shiftId" label={capitalize(t("Shift"))} handleChange={handleChange} items={shifts} defaultValue={formData.shiftId} error={fieldErrors?.shiftId} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
+                                        <Dropdown name="locationId" label={capitalize(t("user.workLocation"))} handleChange={handleChange} items={locations} defaultValue={formData.locationId} error={fieldErrors?.locationId} disabled={utilServices.isEmployee()} disabledDisplay={utilServices.isEmployee()} />
                                     </div>
                                 </div>
 
@@ -273,11 +280,11 @@ const UpdateUserForm = () => {
                                 <div>
                                     <h4 className="text-md font-semibold mb-4">{capitalize(t("user.contactInformation"))}</h4>
                                     <div className="grid grid-cols-2 gap-x-16 gap-y-6">
-                                        <TextBox name="email" label="Email" type="email" value={formData.email} handleChange={handleChange} error={errors.email?.[0]} />
-                                        <TextBox name="phoneNumber" label={capitalize(t("user.phoneNumber"))} value={formData.phoneNumber} handleChange={handleChange} error={errors.phoneNumber?.[0]} />
-                                        <TextBox name="whatsapp" label="WhatsApp" value={formData.whatsapp} handleChange={handleChange} error={errors.whatsapp?.[0]} />
-                                        <TextBox name="linkedin" label="LinkedIn" value={formData.linkedin} handleChange={handleChange} error={errors.linkedin?.[0]} />
-                                        <TextBox name="telegram" label="Telegram" value={formData.telegram} handleChange={handleChange} error={errors.telegram?.[0]} />
+                                        <TextBox name="email" label="Email" type="email" value={formData.email} handleChange={handleChange} error={fieldErrors?.email} />
+                                        <TextBox name="phoneNumber" label={capitalize(t("user.phoneNumber"))} value={formData.phoneNumber} handleChange={handleChange} error={fieldErrors?.phoneNumber} />
+                                        <TextBox name="whatsapp" label="WhatsApp" value={formData.whatsapp} handleChange={handleChange} error={fieldErrors?.whatsapp} />
+                                        <TextBox name="linkedin" label="LinkedIn" value={formData.linkedin} handleChange={handleChange} error={fieldErrors?.linkedin} />
+                                        <TextBox name="telegram" label="Telegram" value={formData.telegram} handleChange={handleChange} error={fieldErrors?.telegram} />
                                     </div>
                                 </div>
 
@@ -285,14 +292,14 @@ const UpdateUserForm = () => {
                                 <div>
                                     <h4 className="text-md font-semibold mb-4">{capitalize(t("user.biography"))}</h4>
                                     <div className="">
-                                        <TextBox type="textarea" name="biography" label={capitalize(t("user.biography"))} value={formData.biography} handleChange={handleChange} error={errors.biography?.[0]} />
+                                        <TextBox type="textarea" name="biography" label={capitalize(t("user.biography"))} value={formData.biography} handleChange={handleChange} error={fieldErrors?.biography} />
                                     </div>
                                 </div>
 
                                 {/* Buttons */}
                                 <div className="flex justify-end gap-3 mt-4">
-                                    <Button type="link" to={`/users`} text="Cancel" fill={false} />
-                                    <Button type="submit" text="Update" />
+                                    <Button type="link" to={`/users`} text={capitalize(t("cancel"))} fill={false} />
+                                    <Button type="submit" text={capitalize(t("update"))} />
                                 </div>
                             </div>
                         </div>

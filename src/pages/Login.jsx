@@ -4,15 +4,14 @@ import hide from "../assets/icons/hide.svg";
 import axios from "axios";
 import AuthServices from "../services/AuthServices.js";
 import TextBox from "../Components/Form/TextBox.jsx";
+import {useErrors} from "../hooks/useErrors.jsx";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-
     const [employeeId, setEmployeeId] = useState("");
     const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState([]);
-    const [generalErrors, setGeneralErrors] = useState([]);
+    const {fieldErrors, generalError, setErrors, clearErrors} = useErrors();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -23,18 +22,14 @@ const Login = () => {
             const user = response.data.payload.user;
 
             localStorage.setItem("token", token);
+            localStorage.setItem("id", user.id);
             localStorage.setItem("employeeId", user.employeeId);
             localStorage.setItem("role", user.role)
             localStorage.setItem("name", user.name);
 
             window.location.href = "/dashboard";
         } catch (err) {
-            if (err && err.status === 422) {
-                setErrors({...errors, ...err.data.errors});
-            } else {
-                setGeneralErrors(err.data.errors);
-                console.error("Error creating user:", err);
-            }
+            setErrors(err);
         }
     };
 
@@ -55,26 +50,26 @@ const Login = () => {
                     <form onSubmit={handleLogin}>
 
                         <div className="flex flex-col gap-8">
-                            <div className={`w-full space-y-2 ${errors.employeeId && "animate-shake" }`}>
+                            <div className={`w-full space-y-2 ${fieldErrors?.employeeId && "animate-shake" }`}>
                                 <input
                                     type="text"
                                     name="employeeId"
                                     placeholder="Employee ID"
-                                    className={`w-full border-b border-primary p-2 font-semibold focus:outline-none placeholder-primary/80 focus:ring-0 ${errors.employeeId && " border-red-500" }`}
+                                    className={`w-full border-b border-primary p-2 font-semibold focus:outline-none placeholder-primary/80 focus:ring-0 ${fieldErrors?.employeeId && " border-red-500" }`}
                                     onChange={(e) => {
                                         setEmployeeId(e.target.value);
-                                        setErrors((prev) => ({ ...prev, employeeId: undefined }));
+                                        clearErrors();
                                     }}
 
                                 />
-                                {errors.employeeId && (
-                                    <span className="text-red-500 text-sm mt-1">{errors.employeeId}</span>
+                                {fieldErrors?.employeeId && (
+                                    <span className="text-red-500 text-sm mt-1">{fieldErrors?.employeeId}</span>
                                 )}
                             </div>
 
 
 
-                            <div className={`w-full space-y-2 ${errors.employeeId && "animate-shake" }`}>
+                            <div className={`w-full space-y-2 ${fieldErrors?.employeeId && "animate-shake" }`}>
                                 <div className="relative">
                                     <input
                                         type={showPassword ? "text" : "password"}
@@ -83,7 +78,7 @@ const Login = () => {
                                         className="border-b border-primary p-2 w-full font-semibold focus:outline-none placeholder-primary/80 focus:ring-0 pr-10"
                                         onChange={(e) => {
                                             setPassword(e.target.value);
-                                            setErrors((prev) => ({ ...prev, password: undefined }));
+                                            clearErrors();
                                         }}
 
                                     />
@@ -96,17 +91,17 @@ const Login = () => {
                                     </button>
                                 </div>
 
-                                {errors.password && (
-                                    <span className="text-red-500 text-sm mt-1">{errors.password}</span>
+                                {fieldErrors?.password && (
+                                    <span className="text-red-500 text-sm mt-1">{fieldErrors?.password}</span>
                                 )}
                             </div>
 
 
-                            {generalErrors.length > 0 && generalErrors.map((error, index) => (
-                                <ul className="text-red-500 text-sm  bg-red-500/10 px-4 py-2 rounded list-disc list-inside">
-                                    <li key={index} >{error}</li>
-                                </ul>
-                            ))}
+                            {generalError && (
+                                <div className="text-red-500 text-sm  bg-red-500/10 px-4 py-2 rounded">
+                                    <span>{generalError}</span>
+                                </div>
+                            )}
 
                             <div className="flex justify-between items-center text-sm px-2">
                                 <label className="flex items-center gap-2 cursor-pointer">

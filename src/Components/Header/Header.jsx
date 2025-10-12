@@ -92,7 +92,7 @@ const Header = () => {
                     <img
                         src={
                             user.photo
-                                ? `${import.meta.env.VITE_API_URL}/storage/${user.photo}`
+                                ? user.photo
                                 : profilePicturePath
                         }
                         className="w-12 h-12 rounded-full object-cover"

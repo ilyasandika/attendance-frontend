@@ -1,43 +1,12 @@
 import api from "../utils/api.js";
 
 const attendanceServices = {
-    getAttendances: async (page, search) => {
-        try {
-            return await api.get(`/attendances?page=${page}&search=${search}`);
-        } catch (error) {
-            console.error("Error fetching attendances: ", error);
-            throw error.response?.data?.errors || "Something went wrong";
-        }
-    },
-
-    checkInOut: async (data) => {
-        try {
-            console.log(data);
-            return await api.post("/attendances/check", data);
-        } catch (error) {
-            console.error("Error checking in/out: ", error);
-            throw error.response?.data?.errors || "Something went wrong";
-        }
-    },
-
-    getAttendanceByLogin: async (page, search) => {
-        try {
-            return await api.get(`/attendances/users?page=${page}&search=${search}`);
-        } catch (error) {
-            console.error("Error fetching attendances: ", error);
-        }
-    },
-
-
-    getAttendanceById: async (id) => {
-        try {
-            return await api.get(`/attendances/${id}`);
-        } catch (error) {
-            console.error("Error fetching attendances: ", error);
-        }
-    }
-
-
+    getAttendances: (page, search) => api.get("/attendances", { params: { page, search } }),
+    checkInOut: (data) => api.post("/attendances/check", data),
+    getAttendanceByLogin: (page, search) => api.get("/attendances/users", { params: { page, search } }),
+    getAttendanceById: (id) => api.get(`/attendances/${id}`),
+    getAttendanceSummary: (date) => api.get("/attendances/summary", { params: { date } }),
+    getAttendanceTimeLine: (date, option) => api.get("/attendances/timeline", { params: { date, option } })
 };
 
 export default attendanceServices;

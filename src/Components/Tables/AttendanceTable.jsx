@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {Link, useSearchParams} from "react-router-dom";
-import {capitalize, getStatusColor, updateSearchParams} from "../../utils/helper.js";
+import {capitalize, getStatusColor, minutesToHM, updateSearchParams} from "../../utils/helper.js";
 import attendanceServices from "../../services/attendanceServices.js";
 import DataTable from "../DataTable/DataTable.jsx"; //
 import AttendanceModal from "../../Modal/AttendanceModal.jsx";
 import utilServices from "../../services/utilServices.js";
 import show from "../../assets/icons/show.svg";
 import {useTranslation} from "react-i18next";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import {useErrors} from "../../hooks/useErrors.jsx";
 
 
 const AttendanceTable = () => {
@@ -16,7 +18,9 @@ const AttendanceTable = () => {
     const [search, setSearch] = useState(searchParams.get("attendance_search") || "");
     const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const {fieldErrors, generalError, setErrors, clearErrors} = useErrors()
 
     const currentPage = Number(searchParams.get("attendance_page")) || 1;
 
@@ -68,7 +72,7 @@ const AttendanceTable = () => {
         {
             key: "employeeId",
             label: "ID",
-            render: (_, row) => row.employeeId,
+            render : (_, row) => <Link to={`/profile/${row.userId}`}>{row.employeeId}</Link>
         },
         {
             key: "name",
@@ -94,11 +98,11 @@ const AttendanceTable = () => {
             key: "status",
             label: "Status",
             render: (_, row) => {
-                const isAbsent = row.checkInStatus === "Absent";
-                const statusText = isAbsent ? "absent" : "present";
-                const statusColor = isAbsent ? "text-red-600" : "text-green-600";
+                const isAbsent = row.checkInStatus === "absent";
+                const isNotRecorded = row.checkInStatus === null;
+                const statusText = isNotRecorded ? "notRecorded" : isAbsent ? "absent" : "present";
 
-                return <span className={`${getStatusColor(capitalize(statusText))} font-medium`}>{capitalize(t(statusText))}</span>;
+                return <span className={`${getStatusColor(statusText)} font-medium`}>{capitalize(t(statusText))}</span>;
             }
         },
         {
@@ -129,8 +133,7 @@ const AttendanceTable = () => {
 
                 const status = row.checkOutStatus;
 
-
-                return row.checkOutTime ? (
+                return row.checkOutTime && row.checkInTime ? (
                     <div className="flex flex-col space-y-1">
                         <span className={`${getStatusColor(status)} font-bold`}>{time}</span>
                         <span className={`${getStatusColor(status)} font-medium`}>{capitalize(t(status))}</span>
@@ -141,10 +144,15 @@ const AttendanceTable = () => {
         {
             key: "hours",
             label: capitalize(t('workHours')),
-            render: (_, row) =>
-                row.checkOutTime && row.checkInTime
-                    ? ((row.checkOutTime - row.checkInTime) / 3600).toFixed(2) + " " + capitalize(t("hrs"))
-                    : "-",
+            render: (_, row) => {
+                if (row.duration) {
+                    const {hours, minutes} = minutesToHM(row.duration);
+                    return `${hours} ${t('h')} ${minutes} ${t('m')}`
+                } else {
+                    return "-"
+                }
+            }
+
         },
         {
             key: "actions",
@@ -171,15 +179,15 @@ const AttendanceTable = () => {
     };
 
     const header = {
-        title: "Attendance Overview",
+        title: capitalize(t("attendanceTable")),
         button: {
             text: capitalize(t("clock")),
-            onClick: () => setModalOpen(true),
+            onClick: () => setAttendanceModalOpen(true),
         },
     };
 
     const handleModalClose = () => {
-        setModalOpen(false)
+        setAttendanceModalOpen(false)
         fetchAttendances();
     };
 
@@ -194,10 +202,11 @@ const AttendanceTable = () => {
             await attendanceServices.checkInOut(formData);
             alert("Absensi berhasil");
         } catch (error) {
-            console.error("Gagal absen:", error);
+            setModalOpen(true);
+            setErrors(error);
         }
-
-        setModalOpen(false);
+        setAttendanceModalOpen(false);
+        fetchAttendances();
     };
 
     return (
@@ -209,9 +218,15 @@ const AttendanceTable = () => {
                 pagination={pagination}
                 isLoading={isLoading}
             />
-            {modalOpen && (
+            {attendanceModalOpen && (
                 <AttendanceModal onClose={handleModalClose} onSubmit={handleSubmit} />
             )}
+
+            {
+                generalError && (
+                    <ConfirmModal type="notification" isOpen={modalOpen} onClose={() => setModalOpen(false)} onConfirm={() => setModalOpen(false)} header={capitalize(t('unableToCheck'), false)} message={generalError}/>
+                )
+            }
         </>
     );
 };

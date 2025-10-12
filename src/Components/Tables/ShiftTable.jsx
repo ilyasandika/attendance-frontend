@@ -98,7 +98,7 @@ const ShiftTable = () => {
                 label: capitalize(t('action')),
                 render: (_, row) => (
                     <Action
-                        edit={ {to: `/shifts-locations/shifts/edit/${row.id}`} }
+                        edit={ {to: `/shifts-locations/shifts/edit/${row.shiftId}`} }
                         dump={{onClick:() => {
                                 setDeleteId(row.shiftId);
                                 setDeleteModal(true)

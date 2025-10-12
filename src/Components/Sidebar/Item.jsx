@@ -16,10 +16,13 @@ const Item = ({ items }) => {
                     (<li key={index}>
                         <Link
                             to={item.to}
-                            className={`flex items-center gap-4 pl-2 py-2 mb-2 hover:bg-primary/10 hover:cursor-pointer text-sm font-medium rounded-lg transition ${
+                            className={`flex items-center gap-5 pl-2 py-2 mb-2 hover:bg-primary/10 hover:cursor-pointer text-sm font-medium rounded-lg transition ${
                                 item.isActive ? "bg-primary/10" : "bg-white"
                             }`}>
-                            <img src={item.isActive ? item.activeIcon : item.inActiveIcon} alt={item.name} className="w-4 h-6" />
+                            {
+                                item.isActive ? item.activeIcon : item.inActiveIcon
+                            }
+
                             <span className="text-medium">{item.name}</span>
                         </Link>
                     </li>)

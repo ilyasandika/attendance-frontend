@@ -1,8 +1,10 @@
 const ToolTipModal = ({
                           message = "Hubungi admin jika ingin mengubah data",
                           position = "center", // left | center | right
+                          className = ""
                       }) => {
     let positionClass = "";
+
 
     switch (position) {
         case "left":
@@ -20,8 +22,8 @@ const ToolTipModal = ({
     return (
         <div
             className={`absolute ${positionClass} bottom-full mb-2
-                        bg-red-800 text-white text-xs px-2 py-1 rounded shadow-md
-                        opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 w-max whitespace-nowrap`}
+                        bg-danger text-white text-xs px-2 py-1 rounded shadow-md
+                        opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 w-max whitespace-nowrap ${className}`}
         >
             {message}
         </div>

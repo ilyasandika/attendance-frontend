@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
-import edit from "../../assets/icons/edit.svg";
-import trash from "../../assets/icons/trash.svg";
-import show from "../../assets/icons/show.svg";
 import { Link, useSearchParams } from "react-router-dom";
-import { updateSearchParams } from "../../utils/helper.js";
+import {capitalize, updateSearchParams} from "../../utils/helper.js";
 import holidayServices from "../../services/holidayServices.js";
-import utilServices from "../../services/utilServices.js";
-import log from "eslint-plugin-react/lib/util/log.js";
+import Action from "../Button/Action.jsx";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import {useTranslation} from "react-i18next";
 
 const HolidayTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
     const [holidays, setHolidays] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const {t} = useTranslation();
     const [search, setSearch] = useState(searchParams.get("holidays_search") || "");
     const currentPage = Number(searchParams.get("holidays_page")) || 1;
 
@@ -36,6 +37,8 @@ const HolidayTable = () => {
              fetchHolidays();
         } catch (error) {
             console.error(error);
+        } finally {
+            setDeleteModal(false);
         }
     };
 
@@ -72,16 +75,17 @@ const HolidayTable = () => {
                 key: "action",
                 label: "Action",
                 render: (_, row) => (
+                    <Action
+                        edit={ {to: `/holidays/edit/${row.id}`} }
+                        dump={{
+                            onClick:() => {
+                                setDeleteId(row.id);
+                                setDeleteModal(true)
+                            }
+                            }}
+                    />
 
-                    <div className="flex gap-4">
-                        <Link to={`/holidays/edit/${row.holidayId}`} className={`cursor-pointer ${!utilServices.isAdmin() && "hidden"}`}>
-                            <img src={edit} className="w-4" />
-                        </Link>
-                        <button className={`cursor-pointer ${!utilServices.isAdmin() && "hidden"}`} onClick={() => deleteHoliday(row.holidayId)} >
-                            <img src={trash} className="w-4" />
-                        </button>
 
-                    </div>
                 ),
             },
         ],
@@ -106,7 +110,14 @@ const HolidayTable = () => {
         pageName: "holidays_page",
     };
 
-    return <DataTable header={header} columns={columns} items={holidays} pagination={pagination} isLoading={isLoading} />;
+    return (
+       <>
+           <DataTable header={header} columns={columns} items={holidays} pagination={pagination} isLoading={isLoading} />
+           {deleteModal && (
+               <ConfirmModal isOpen={deleteModal} onClose={() => setDeleteModal(false)} onConfirm={() => deleteHoliday(deleteId)}/>
+           )}
+       </>
+    );
 };
 
 export default HolidayTable;

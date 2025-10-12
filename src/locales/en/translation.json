@@ -4,22 +4,52 @@
   "search" : "search",
   "active" : "active",
   "inactive" : "inactive",
+  "remaining" : "remaining",
+  "usedLeave" : "used leave",
+  "totalLeave" : "total leave",
+  "usedDays" : "used days",
   "next" : "next",
+  "year" : "tahun",
+  "successCreateLeave" : "leave has been created",
+  "successCreateUser" : "user has been registered",
+  "successUpdateUser" : "user has been updated",
+  "userSuccessDelete" : "user has been deleted",
+  "checkInOutside" : "check in outside location",
+  "userCantBeEmpty" : "please select a user",
+  "checkOutOutside" : "check out outside location",
+  "periodeCantBeEmpty" : "periode cannot be empty",
   "previous" : "previous",
   "page" : "page",
   "of" : "of",
+  "confirmReject" : "Confirm Reject",
   "clockIn" : "clock in",
   "clockOut" : "clock out",
   "workHours" : "work hours",
+  "create" : "create",
+  "update" : "update",
+  "attachment" : "attachment",
+  "dateStart" : "date start",
+  "dateEnd" : "date end",
+  "totalDays" : "total days",
+  "approvedBy" : "approved by",
 
   "attendanceOverview" : "attendance overview",
+  "unableToCheck":  "unable to clock in/out",
   "clock" : "clock in/out",
-
+  "attendanceTable" :  "attendance table",
+  "attendanceForm" : "attendance form",
+  "attendanceDetail" : "attendance detail",
   "present" : "present",
+  "validLocation" : "valid location",
   "absent" : "absent",
   "earlyLeave" : "early leave",
+  "attendanceDistribution" : "attendance distribution",
   "late" : "late",
-
+  "totalUsers" : "total users",
+  "attendanceComparisonChart" : "attendance comparison chart",
+  "notRecorded" : "no record",
+  "noRecord" : "no record",
+  "cantRemoveApprovedOrRejectedLeave" : "cant remove approved or rejected leave",
   "Present" : "present",
   "Absent" : "absent",
   "Early Leave" : "early leave",
@@ -37,6 +67,17 @@
   "female" : "female",
   "address" : "address",
 
+  "leaveEntitlements" : {
+    "list" : "leave entitlement list"
+  },
+
+  "leaves" :{
+    "list" : "leave list",
+    "add" : "add leave",
+    "create" : "create new leave",
+    "update" : "update leave",
+    "edit" : "edit leave"
+  },
 
   "user" : {
     "list" : "user list",
@@ -118,8 +159,13 @@
     "list" : "assignments list"
   },
 
+  "delete" :  "delete",
+  "close" : "close",
+  "back" : "back",
+
   "dailySettings" : "Pengaturan harian",
   "setAsDefault" : "set as default",
+  "allowOutsideLocation" : "allow outside location",
   "description" : "description",
   "monday":  "monday",
   "tuesday":  "tuesday",

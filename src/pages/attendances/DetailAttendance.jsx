@@ -3,14 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import attendanceServices from "../../services/attendanceServices.js";
 import TextBox from "../../Components/Form/TextBox.jsx";
 import Button from "../../Components/Button/Button.jsx";
-import {getStatusColor} from "../../utils/helper.js";
+import {capitalize, getStatusColor, timestampToObject} from "../../utils/helper.js";
+import {useTranslation} from "react-i18next";
 
 const AttendanceDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const {t} = useTranslation();
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -33,8 +34,8 @@ const AttendanceDetailPage = () => {
 
     return (
         <div className="bg-white px-10 py-8 rounded-xl w-full max-w-6xl mx-auto">
-            <h3 className="text-lg text-left font-semibold mb-4">Attendance Detail</h3>
-            <div className="space-y-10 text-left mt-5 border-t-2 border-gray-300 pt-5">
+            <h3 className="text-lg text-left font-semibold mb-4">{capitalize(t("attendanceDetail"))}</h3>
+            <div className="grid grid-cols-2 space-x-8 text-left mt-5 border-t-2 border-gray-300 pt-5">
                 <RenderSection
                     label="Check In"
                     time={data.checkInTime}
@@ -62,10 +63,10 @@ const AttendanceDetailPage = () => {
     );
 };
 
-const formatDateTime = (timestamp) => {
+const formatDateTime = (timestamp, language = 'en-EN') => {
     if (!timestamp) return "-";
     const date = new Date(timestamp * 1000);
-    return date.toLocaleString("en-EN", {
+    return date.toLocaleString(language, {
         weekday: "long",
         day: "2-digit",
         month: "long",
@@ -77,47 +78,45 @@ const formatDateTime = (timestamp) => {
     });
 };
 
-const RenderSection = ({ label, time, status, comment, photoUrl, address, outsideLocation }) => (
-    <div className="flex flex-col gap-6 items-start">
-        <h3 className="text-lg font-semibold">{label}</h3>
-        <div className="flex gap-10 w-full items-center">
-            <div className="w-full h-full md:w-1/2">
-                <img
-                    src={
-                        status === "Absent"
-                            ? "https://placehold.co/600x400?text=Absent"
-                            : photoUrl
-                                ? `${import.meta.env.VITE_API_URL}/storage/${photoUrl}`
-                                : "https://placehold.co/600x500?text=Not+Check+Yet"
-                    }
-                    alt={`${label} Photo`}
-                    className="rounded-xl w-full h-full object-cover"
-                />
-            </div>
+const RenderSection = ({ label, time, status, comment, photoUrl, address, outsideLocation }) => {
 
-            <div className="flex flex-col gap-6 w-full md:w-1/2 text-sm">
-                <TextBox label="Time" value={time ? formatDateTime(time) : "-"} readOnly onlyBottom />
-                <TextBox label="Status" readOnly onlyBottom> {time ? (<p className={`inline-block font-bold px-4 py-2 rounded-lg ${getStatusColor(status, true)}`}>{status}</p> || "-") : "-"} </TextBox>
-                <TextBox label="Comment" value={time ? (comment || "-") : "-"} readOnly onlyBottom />
-                <TextBox label="Address" value={time ? (address || "-") : "-"} readOnly onlyBottom />
-                <TextBox
-                    label="Valid Location"
-                    readOnly
-                    onlyBottom
-                >
-                    {time ? (
-                        <p className={`inline-block font-bold px-4 py-2 rounded-lg ${getStatusColor(String(!outsideLocation), true)}`}>
-                            {!outsideLocation ? "Yes" : "No"}
+    const {t, i18n} = useTranslation();
+    const timeData = time ? timestampToObject(time, i18n.language === "en-US" ? "en-EN" : "id-ID") : "-";
+    return (
+        <div className="flex flex-col gap-6 items-start">
+            <h3 className="text-lg font-semibold">{label}</h3>
+            <div className="flex flex-col gap-10 w-full items-center">
+                <div className="flex flex-row w-full justify-between gap-8">
+                    <img
+                        src={
+                            status === "Absent"
+                                ? "https://placehold.co/400x300?text=Absent"
+                                : photoUrl
+                                    ? `${import.meta.env.VITE_API_URL}/storage/${photoUrl}`
+                                    : "https://placehold.co/400x300?text=Not+Check+Yet"
+                        }
+                        alt={`${label} Photo`}
+                        className="rounded-xl aspect-3/4 object-cover h-40"
+                    />
+                    <div className="w-full flex flex-col justify-between">
+                        <TextBox label={capitalize(t("time"))} value={timeData.day ? `${timeData.day}, ${timeData.date} ${timeData.month} ${timeData.year}, ${timeData.time} ` : "-"} readOnly onlyBottom />
+                        <TextBox label={capitalize(t("status"))} readOnly onlyBottom> {time ? (<p className={`inline-block font-bold px-4 py-2 rounded-lg ${getStatusColor(status, true)}`}>{capitalize(t(status))}</p> || "-") : "-"} </TextBox>
+                    </div>
+                   </div>
+
+                <div className="flex flex-col gap-6 w-full text-sm">
+                    <TextBox label={capitalize(t("comment"))} value={time ? (comment || "-") : "-"} readOnly onlyBottom />
+                    <TextBox label={capitalize(t("address"))} value={time ? (address || "-") : "-"} readOnly onlyBottom />
+                    <div className="flex gap-4 items-center w-full">
+                        <span className="font-semibold"> {capitalize(t("validLocation"))}</span>
+                        <p className={`inline-block font-bold px-4 py-2 rounded-lg ${getStatusColor(String(time ? !outsideLocation : "-"), true)}`}>
+                            {time ? (!outsideLocation ? capitalize(t("yes")) : capitalize(t("no"))) : "-"}
                         </p>
-                    ) : (
-                        "-"
-                    )}
-
-                </TextBox>
-
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-);
+    )
+}
 
 export default AttendanceDetailPage;

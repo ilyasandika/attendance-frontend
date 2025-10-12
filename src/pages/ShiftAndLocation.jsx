@@ -12,7 +12,7 @@ const ShiftAndLocation = () => {
                 <>
                     <ShiftTable />
                     <LocationTable />
-                    <ScheduleTable />
+                    {/*<ScheduleTable />*/}
                 </>
             )}
         </div>

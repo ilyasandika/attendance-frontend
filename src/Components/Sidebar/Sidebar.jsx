@@ -1,27 +1,28 @@
 import Item from "./Item.jsx";
-
-
-import dashboard from "../../assets/icons/dashboard.svg";
-import dashboardInactive from "../../assets/icons/dashboard_inactive.svg";
-import profile from "../../assets/icons/profile.svg";
-import profileInactive from "../../assets/icons/profile_inactive.svg";
-import report from "../../assets/icons/report.svg";
-import reportInactive from "../../assets/icons/report_inactive.svg";
-import schedule from "../../assets/icons/schedule.svg";
-import scheduleInactive from "../../assets/icons/schedule_inactive.svg";
-
 import { useLocation } from "react-router-dom";
 import utilServices from "../../services/utilServices.js";
+import {
+    ArrowRightStartOnRectangleIcon, BuildingOffice2Icon, CalendarDaysIcon, CalendarIcon,
+    ComputerDesktopIcon,
+    DocumentChartBarIcon,
+    UserGroupIcon
+} from "@heroicons/react/16/solid/index.js";
+import {capitalize} from "../../utils/helper.js";
+import {useTranslation} from "react-i18next";
 
 const Sidebar = () => {
     const location = useLocation();
     const isAdmin = utilServices.isAdmin();
+    const {t} = useTranslation();
+
+    const itemStyle = "h-5 text-primary/40"
+    const activeItemStyle = `${itemStyle} text-primary/100`
 
     const homeItems = [
         {
             name: "Dashboard",
-            activeIcon: dashboard,
-            inActiveIcon: dashboardInactive,
+            activeIcon: <ComputerDesktopIcon className={activeItemStyle}/>,
+            inActiveIcon: <ComputerDesktopIcon className={itemStyle}/>,
             isAllowed: true,
             to: "/dashboard",
             get isActive() {
@@ -29,9 +30,9 @@ const Sidebar = () => {
             },
         },
         {
-            name: "User",
-            activeIcon: profile,
-            inActiveIcon: profileInactive,
+            name: capitalize(t("users")),
+            activeIcon: <UserGroupIcon className={activeItemStyle}/>,
+            inActiveIcon: <UserGroupIcon className={itemStyle}/>,
             isAllowed: !!isAdmin,
             to: "/users",
             get isActive() {
@@ -39,11 +40,22 @@ const Sidebar = () => {
             },
         },
         {
-            name: "Report",
-            activeIcon: report,
-            inActiveIcon: reportInactive,
+            name: capitalize(t("report")),
+            activeIcon: <DocumentChartBarIcon className={activeItemStyle}/>,
+            inActiveIcon: <DocumentChartBarIcon className={itemStyle}/>,
             isAllowed: true,
             to: "/reports",
+            get isActive() {
+                return location.pathname.startsWith(this.to);
+            },
+        },
+
+        {
+            name: capitalize(t("leave")),
+            activeIcon: <ArrowRightStartOnRectangleIcon className={activeItemStyle}/>,
+            inActiveIcon: <ArrowRightStartOnRectangleIcon className={itemStyle}/>,
+            isAllowed: true,
+            to: "/leaves",
             get isActive() {
                 return location.pathname.startsWith(this.to);
             },
@@ -52,30 +64,30 @@ const Sidebar = () => {
 
     const configItems = [
         {
-            name: "Shifts & Locations",
+            name: `${capitalize(t("shifts"))} & ${capitalize(t("location"))}`,
             to: "/shifts-locations",
-            activeIcon: report,
-            inActiveIcon: reportInactive,
+            activeIcon: <CalendarIcon className={activeItemStyle}/>,
+            inActiveIcon: <CalendarIcon className={itemStyle}/>,
             isAllowed: true,
             get isActive() {
                 return location.pathname.startsWith(this.to);
             },
         },
         {
-            name: "Dept & Roles",
+            name: `${capitalize(t("department"))} & ${capitalize(t("role"))}`,
             to: "/departments-roles",
-            activeIcon: report,
-            inActiveIcon: reportInactive,
+            activeIcon: <BuildingOffice2Icon className={activeItemStyle}/>,
+            inActiveIcon: <BuildingOffice2Icon className={itemStyle}/>,
             isAllowed: true,
             get isActive() {
                 return location.pathname.startsWith(this.to);
             },
         },
         {
-            name: "Holiday",
+            name: capitalize(t("holiday")),
             to: "/holidays",
-            activeIcon: schedule,
-            inActiveIcon: scheduleInactive,
+            activeIcon: <CalendarDaysIcon className={activeItemStyle}/>,
+            inActiveIcon: <CalendarDaysIcon className={itemStyle}/>,
             isAllowed: true,
             get isActive() {
                 return location.pathname.startsWith(this.to);
@@ -86,18 +98,22 @@ const Sidebar = () => {
     return (
         <aside className="w-64 bg-white text-primary h-screen overflow-y-auto fixed py-5 px-8 z-50">
 
-        <img src="/images/logo.svg" className="p-4 text-center" />
+        <img src="/images/LOGO_ALHAYAH.png" className="p-4 text-center" />
             <ul className="mt-5">
                 <div className="flex items-center gap-4 flex-row text-sm text-primary/70">
                     <span>Home</span>
                     <hr className="w-full"/>
                 </div>
                 <Item items={homeItems} />
-                <div className="mt-5 flex items-center gap-4 flex-row text-sm text-primary/70">
-                    <span>Configuration</span>
-                    <hr className="w-full"/>
-                </div>
-                <Item items={configItems} />
+                {isAdmin &&
+                   <div>
+                       <div className="mt-5 flex items-center gap-4 flex-row text-sm text-primary/70">
+                           <span>{capitalize(t("configuration"))}</span>
+                           <hr className="w-full"/>
+                       </div>
+                       <Item items={configItems} />
+                   </div>
+                }
 
             </ul>
         </aside>

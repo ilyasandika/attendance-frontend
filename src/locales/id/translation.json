@@ -1,10 +1,52 @@
 {
   "clockIn" : "clock in",
   "clockOut" : "clock out",
+  "hours" : "jam",
+  "remaining" : "tersisa",
+  "minutes" : "menit",
+  "users" : "pengguna",
+  "holiday" : "hari libur",
+  "userSuccessDelete" : "user berhasil dihapus",
+  "addLeave" : "buat pengajuan cuti",
+  "successDeleteLeave" : "pengajuan cuti berhasil dihapus",
+  "configuration" : "konfigurasi",
+  "checkInOutside" : "presensi masuk diluar lokasi",
+  "checkOutOutside" : "presensi keluar diluar lokasi",
+  "successCreateLeve" : "pengajuan cuti berhasil dibuat",
+  "periodeCantBeEmpty" : "periode tidak boleh kosong",
+  "userCantBeEmpty" : "silahkan pilih pengguna",
+  "month" : "bulan",
+  "report" :  "laporan",
+  "totalLeave" : "jatah cuti",
+  "usedLeave" : "cuti terpakai",
+  "usedDays" : "hari terpakai",
+  "success" : "sukses",
+  "comment" : "komentar",
+  "confirm" : "konfirmasi",
+  "confirmReject" : "konfirmasi tolak",
+  "successCreateUser" : "user berhasil diregistrasi",
+  "successUpdateUser" : "data user berhasil diperbarui",
+  "cantRemoveApprovedOrRejectedLeave" : "tidak bisa menghapus pengajuan cuti yang sudah disetujui atau ditolak",
+  "h" : "j",
+  "attendanceTable" : "tabel kehadiran",
+  "day" : "hari",
+  "time" : "waktu",
+  "onTime" : "tepat waktu",
+  "attendanceDetail" : "detail kehadiran",
+  "no" : "tidak",
+  "yes" : "ya",
+  "attendanceForm" : "form kehadiran",
+  "attendanceComparisonChart" : "Grafik Perbandingan Kehadrian",
+  "validLocation" : "lokasi valid",
+  "dayOff" : "libur",
+  "noRecord" : "tidak ada data",
+  "days" : "hari",
   "name" : "nama",
   "date" : "tanggal",
   "workHours" : "jam kerja",
   "role" : "jabatan",
+  "daily" : "harian",
+  "monthly" : "bulanan",
   "department" : "departemen",
   "dateCreated" : "waktu dibuat",
   "accountStatus" : "status akun",
@@ -14,6 +56,19 @@
   "female" : "perempuan",
   "address" : "alamat",
   "location": "lokasi",
+  "create" : "buat",
+  "update" : "perbarui",
+  "attachment"  : "lampiran",
+  "dateStart" : "tanggal mulai",
+  "dateEnd" : "tanggal berakhir",
+  "totalDays" : "total hari",
+  "approvedBy" : "disetujui oleh",
+  "approve" : "setujui",
+  "reject" : "tolak",
+
+  "leaveEntitlements" : {
+    "list" : "daftar jatah cuti"
+  },
 
   "departments" : {
     "list" : "daftar departemen",
@@ -46,8 +101,6 @@
     "create" : "buat lokasi",
     "radius" : "radius"
   },
-
-
 
   "user" : {
     "list" : "daftar pengguna",
@@ -84,6 +137,27 @@
     "list" : "Daftar Penugasan Kerja"
   },
 
+  "leaves" :{
+    "list" : "daftar pengajuan cuti",
+    "add" : "ajukan cuti baru",
+    "create" : "ajukan cuti",
+    "update" : "perbarui cuti",
+    "edit" : "perbarui cuti"
+  },
+
+  "selectDateRange" : "pilih rentang tanggal",
+  "leave" : "cuti",
+  "type" : "tipe",
+  "reason" : "alasan",
+  "leaveType" : "tipe cuti",
+
+  "annual" : "tahunan" ,
+  "sick" : "sakit" ,
+  "unpaid" : "tidak dibayar" ,
+  "maternity" : "melahirkan" ,
+  "emergency" : "darurat" ,
+  "other" : "lainnya" ,
+
   "shift" : {
     "list" : "daftar shift",
     "add" : "tambahkan shift",
@@ -100,21 +174,31 @@
   },
   "description" : "deskripsi",
   "setAsDefault" : "atur sebagai default",
+  "allowOutsideLocation" : "perbolehkan absen diluar lokasi",
 
   "attendanceOverview" : "ringkasan presensi",
   "clock" : "isi presensi",
 
   "present" : "hadir",
   "absent" : "absen",
-  "earlyLeave" : "lebih awal",
+  "attendanceDistribution" : "distribusi kehadiran",
+  "earlyLeave" : "pulang lebih awal",
+  "totalUsers" : "jumlah pengguna",
   "late" : "terlambat",
+  "notRecorded" : "belum absen",
+
+  "delete" :  "hapus",
+  "close" : "tutup",
+
+  "unableToCheck" : "gagal absen",
 
   "Present" : "hadir",
   "Absent" : "absen",
   "Early Leave" : "lebih awal",
   "Late" : "terlambat",
-
+  "back" : "kembali",
   "hrs" : "jam",
+
 
   "search" : "cari",
   "active" : "aktif",

@@ -4,7 +4,7 @@ import Button from "../Components/Button/Button.jsx";
 import {capitalize} from "../utils/helper.js";
 import {useTranslation} from "react-i18next";
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, message, header }) => {
+const ConfirmModal = ({ type = "confirm", isOpen, onClose, onConfirm, message, header }) => {
 
     const {t} = useTranslation();
     const defaultMessage = capitalize(t('deleteMessage'), false);
@@ -26,8 +26,10 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, message, header }) => {
                 </div>
 
                 <div className="bg-gray-50 px-6 py-4 flex justify-end gap-3 rounded-b-lg">
-                    <Button onClick={onClose} fill={false} text={t("Cancel")} className={"text-sm"}/>
-                    <Button onClick={onConfirm} danger text={t("Delete")} className={"text-sm"}/>
+                    <Button onClick={onClose} fill={false} text={capitalize(t(type === "confirm" ? "cancel" : "close"))} className={"text-sm"}/>
+                    {type === "confirm" &&
+                        <Button onClick={onConfirm} danger text={capitalize(t("delete"))} className={"text-sm"}/>
+                    }
                 </div>
             </div>
         </div>

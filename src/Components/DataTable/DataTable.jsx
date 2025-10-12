@@ -13,13 +13,14 @@ const DataTable = ({ header, columns, items, pagination, isLoading, onClick = nu
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">{header.title}</h2>
                 <div className="flex gap-2">
-                    <input
-                        type="text"
-                        placeholder={`${capitalize(t('search'))} ...` }
-                        className="border rounded-lg px-3 py-1"
-                        value={pagination.search}
-                        onChange={(e) => pagination.setSearch(e.target.value)}
-                    />
+                    {pagination.search &&
+                        <input
+                            type="text"
+                            placeholder={`${capitalize(t('search'))} ...` }
+                            className="border rounded-lg px-3 py-1"
+                            value={pagination.search}
+                            onChange={(e) => pagination.setSearch(e.target.value)}
+                        />}
                     {header.button &&
                         <Link to={header.button.link} onClick={header.button.onClick} className="bg-primary text-white px-4 py-2 rounded-lg cursor-pointer">
                             {header.button.text}
@@ -66,27 +67,29 @@ const DataTable = ({ header, columns, items, pagination, isLoading, onClick = nu
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-between items-center mt-4">
-                <button
-                    disabled={pagination.currentPage === 1}
-                    onClick={() =>
-                        handlePageChange(pagination.setSearchParams, pagination.currentPage - 1, pagination.totalPages, pagination.pageName)
-                    }
-                    className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
-                    {capitalize(t('previous'))}
-                </button>
-                <span>
+            {pagination &&
+                <div className="flex justify-between items-center mt-4">
+                    <button
+                        disabled={pagination.currentPage === 1}
+                        onClick={() =>
+                            handlePageChange(pagination.setSearchParams, pagination.currentPage - 1, pagination.totalPages, pagination.pageName)
+                        }
+                        className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
+                        {capitalize(t('previous'))}
+                    </button>
+                    <span>
                     {capitalize(t('page'))} {pagination.currentPage}  {t('of')} {pagination.totalPages}
                 </span>
-                <button
-                    disabled={pagination.currentPage === pagination.totalPages}
-                    onClick={() =>
-                        handlePageChange(pagination.setSearchParams, pagination.currentPage + 1, pagination.totalPages, pagination.pageName)
-                    }
-                    className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
-                    {capitalize(t('next'))}
-                </button>
-            </div>
+                    <button
+                        disabled={pagination.currentPage === pagination.totalPages}
+                        onClick={() =>
+                            handlePageChange(pagination.setSearchParams, pagination.currentPage + 1, pagination.totalPages, pagination.pageName)
+                        }
+                        className="px-4 py-1 border rounded hover:cursor-pointer disabled:opacity-50">
+                        {capitalize(t('next'))}
+                    </button>
+                </div>
+            }
         </div>
     );
 };

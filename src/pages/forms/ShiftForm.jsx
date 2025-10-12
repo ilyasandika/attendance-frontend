@@ -31,6 +31,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
         name: "",
         default: false,
         description: "",
+        allowOutsideLocation: false,
         ...generateDefaultDays(),
         ...initialValues,
     });
@@ -64,7 +65,6 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(shiftData);
         onSubmit(shiftData);
     };
 
@@ -75,7 +75,7 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
             </h3>
             <hr className="text-primary/20" />
             <form onSubmit={handleSubmit} className="space-y-10 mt-8">
-                <div className="flex gap-4 items-end justify-between">
+                <div className="flex items-end gap-4  justify-between">
                     <div className="">
                         <TextBox
                             id="name"
@@ -94,14 +94,25 @@ const ShiftForm = ({ mode = "create", initialValues = {}, onSubmit }) => {
                             handleChange={handleInputChange}
                         />
                     </div>
-                    <div className="flex items-center gap-2 pb-2">
-                        <input
-                            type="checkbox"
-                            name="default"
-                            checked={shiftData.default}
-                            onChange={handleInputChange}
-                        />
-                        <span>{capitalize(t("setAsDefault"), false)}</span>
+                    <div>
+                        <div className="flex items-center gap-2 pb-2">
+                            <input
+                                type="checkbox"
+                                name="default"
+                                checked={shiftData.default}
+                                onChange={handleInputChange}
+                            />
+                            <span>{capitalize(t("setAsDefault"), false)}</span>
+                        </div>
+                        <div className="flex items-center gap-2 ">
+                            <input
+                                type="checkbox"
+                                name="allowOutsideLocation"
+                                checked={shiftData.allowOutsideLocation}
+                                onChange={handleInputChange}
+                            />
+                            <span>{capitalize(t("allowOutsideLocation"), false)}</span>
+                        </div>
                     </div>
                 </div>
 

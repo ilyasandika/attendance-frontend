@@ -26,7 +26,15 @@ api.interceptors.response.use(
             localStorage.removeItem("token");
             window.location.href = "/login";
         }
-        return Promise.reject(error);
+
+        const normalizedError = {
+            success : false,
+            status: error.response?.status || 500,
+            message: error.response?.data?.message || "Something went wrong",
+            errors: error.response?.data?.errors || { message: "Something went wrong" },
+        };
+
+        return Promise.reject(normalizedError);
     }
 );
 

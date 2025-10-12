@@ -19,7 +19,9 @@ const utilServices = {
 
     isEmployee:() => {
         return utilServices.getUserRole() === "employee";
-    }
+    },
+
+    getUserId: () => localStorage.getItem("id")
 };
 
 export default utilServices;

@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import TextBox from "../Components/Form/TextBox.jsx";
 import utilServices from "../services/utilServices.js";
 import Button from "../Components/Button/Button.jsx"
+import {useTranslation} from "react-i18next";
+import {capitalize} from "../utils/helper.js";
+import {ArrowPathIcon} from "@heroicons/react/24/solid/index.js";
 
 
 const AttendanceModal = ({ onClose, onSubmit }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const streamRef = useRef(null);
+    const {t} = useTranslation();
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [address, setAddress] = useState("");
     const [comment, setComment] = useState("");
@@ -16,7 +20,6 @@ const AttendanceModal = ({ onClose, onSubmit }) => {
         datetime: new Date(),
     });
 
-    // Dapatkan lokasi GPS
     const getLocation = () => {
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
@@ -118,7 +121,7 @@ const AttendanceModal = ({ onClose, onSubmit }) => {
                 latitude: location.lat,
                 longitude: location.lon,
                 comment,
-                photo: photoFile, // file, bukan string base64
+                photo: photoFile,
                 address : address
             };
 
@@ -131,7 +134,7 @@ const AttendanceModal = ({ onClose, onSubmit }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div className="bg-white rounded-2xl w-full max-w-2xl p-6 space-y-4 shadow-lg">
-                <h2 className="text-xl font-bold">Form Absensi</h2>
+                <h2 className="text-xl font-bold">{capitalize(t("attendanceForm"))}</h2>
 
                 {/* MAP */}
                 <div>
@@ -149,7 +152,7 @@ const AttendanceModal = ({ onClose, onSubmit }) => {
                         onClick={getLocation}
                         className="text-sm text-blue-600 hover:underline"
                     >
-                        Refresh Lokasi
+                        <ArrowPathIcon className={"w-4 cursor-pointer text-primary"}/>
                     </button>
                 </div>
 
@@ -160,19 +163,16 @@ const AttendanceModal = ({ onClose, onSubmit }) => {
                     </div>
 
                     <div className="flex flex-col gap-4 w-full text-left">
-                        <TextBox onlyBottom={true} label="Time" id="time" name="time" type="text" value={`${serverTime.day ? `${formatDateTime(serverTime.datetime)}` : "Loading data ..."}`} readOnly={true}/>
-                        <TextBox onlyBottom={true} label="Address" id="address" name="address" type ="text" value={address ? address : "loading data ..."} readOnly={true}/>
-                        <TextBox onlyBottom={true} label="Comment" id="comment" name="comment" type ="text" value={comment} handleChange={(e) => setComment(e.target.value)}/>
+                        <TextBox onlyBottom={true} label={capitalize(t("time"))} id="time" name="time" type="text" value={`${serverTime.day ? `${formatDateTime(serverTime.datetime)}` : "Loading data ..."}`} readOnly={true}/>
+                        <TextBox onlyBottom={true} label={capitalize(t("address"))} id="address" name="address" type ="text" value={address ? address : "loading data ..."} readOnly={true}/>
+                        <TextBox onlyBottom={true} label={capitalize(t("comment"))} id="comment" name="comment" type ="text" value={comment} handleChange={(e) => setComment(e.target.value)}/>
                     </div>
                 </div>
 
                 {/* BUTTONS */}
                 <div className="flex justify-end gap-2 pt-2">
-
-
-                    <Button text="Back" onClick={onClose} fill={false} />
-
-                    <Button text="Absen Sekarang" onClick={handleCapture}/>
+                    <Button text={capitalize(t('back'))} onClick={onClose} fill={false} />
+                    <Button text={capitalize(t('clock'))} onClick={handleCapture}/>
                 </div>
             </div>
         </div>

@@ -1,70 +1,24 @@
 import api from "../utils/api.js";
 
 const userServices = {
-    getCurrent: async () => {
+    getCurrent: async () => await api.get("/users/current"),
+    getUsers: async (page, search, all = "") => api.get("/users",{ params: { page, search, all }}),
+    createUser: async (data) => await api.post("/users", data),
+    updateUser: async (data) => await api.post(`/users/${data.id}`, data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }),
+    getUserById: async (id) => api.get(`/users/${id}`),
+    deleteUser: async (id) =>  await api.delete(`/users/${id}`),
+    getTotalUserByDepartment : async () => {
         try {
-            return await api.get("/users/current");
-
-        } catch (error) {
-            console.error("Error fetching current user: ", error);
-            throw error.response?.data?.errors || "Something went wrong";
-        }
-    },
-
-    getUsers: async (page, search) => {
-        try {
-            return await api.get("/users", {
-                params: { page, search },
-            });
-
-        } catch (error) {
-            console.error("Error fetching users: ", error);
-            throw error.response?.data?.errors || "Something went wrong";
-        }
-    },
-
-    createUser: async (data) => {
-        try {
-            return await api.post("/users", data);
-        } catch (error) {
-            throw error.response || "Something went wrong";
-        }
-    },
-
-    updateUser: async (data) => {
-        try {
-            console.log(data)
-            return await api.post(`/users/${data.id}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-        } catch (error) {
-            console.error("Error update user: ", error);
-            throw error.response || "Something went wrong";
-        }
-    },
-
-    getUserById: async (id) => {
-        try {
-            return await api.get(`/users/${id}`);
-
-        } catch (error) {
-            console.error("Error find user: ".Error);
-            throw error.response?.data?.errors;
-        }
-    },
-
-    deleteUser: async (id) => {
-        try {
-            return await api.delete(`/users/${id}`);
-
+            return await api.get(`/users/department`);
         } catch (error) {
             console.error("Error delete user: ", error);
             throw error.response?.data?.errors || "Something went wrong";
         }
-    },
+    }
 
 
 };

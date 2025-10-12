@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import {useTranslation} from "react-i18next";
+import userServices from "../../services/userServices.js";
 
 const UserOverview = () => {
     const {t} = useTranslation();
@@ -13,12 +14,7 @@ const UserOverview = () => {
 
     const fetchUserStats = async () => {
         try {
-            const token = localStorage.getItem("token");
-            if (!token) return console.error("No token found");
-
-            const response = await axios.get("http://localhost:8000/api/users/department", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await userServices.getTotalUserByDepartment()
             setChartData(response.data.payload);
         } catch (error) {
             console.error("Error fetching user statistics:", error);
@@ -32,6 +28,7 @@ const UserOverview = () => {
             <div className="mt-4">
                 <ResponsiveContainer width="100%" height={320}>
                     <BarChart data={chartData} barSize={50}>
+                        <CartesianGrid stroke="#aaa" strokeDasharray="5 5" />
                         <XAxis dataKey="departmentName" />
                         <YAxis />
                         <Tooltip />

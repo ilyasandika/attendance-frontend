@@ -26,6 +26,11 @@ import CreateRolePage from "../pages/schedules/CreateRole.jsx";
 import UpdateRolePage from "../pages/schedules/UpdateRole.jsx";
 import CreateLocationPage from "../pages/schedules/CreateLocation.jsx";
 import UpdateLocationPage from "../pages/schedules/UpdateLocation.jsx";
+import Leave from "../pages/Leave.jsx";
+import CreateLeavePage from "../pages/leave/CreateLeave.jsx";
+import UpdateLeavePage from "../pages/leave/UpdateLeave.jsx";
+import DetailLeavePage from "../pages/leave/DetailLeave.jsx";
+import UserDetail from "../pages/UserDetail.jsx";
 
 const AppRoutes = () => {
     return (
@@ -41,7 +46,13 @@ const AppRoutes = () => {
                     <Route path="/reports" element={<Report />} />
                     <Route path="/schedules" element={<Schedule />} />
                     <Route path="/profile/edit" element={<EditUser />} />
+                    <Route path="/profile/:id" element={<UserDetail />} />
                     <Route path="/attendances/detail/:id" element={<DetailAttendance />} />
+
+                    <Route path="/leaves" element={<Leave />} />
+                    <Route path="/leaves/add" element={<CreateLeavePage />} />
+                    <Route path="/leaves/edit/:id" element={<UpdateLeavePage/>} />
+                    <Route path="/leaves/detail/:id" element={<DetailLeavePage/>} />
                 </Route>
             </Route>
 

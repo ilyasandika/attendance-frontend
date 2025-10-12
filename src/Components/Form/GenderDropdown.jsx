@@ -1,5 +1,6 @@
 import {capitalize} from "../../utils/helper.js";
 import {useTranslation} from "react-i18next";
+import {inputBackground, inputBorder} from "../../constant.js";
 
 const GenderDropdown = ({ handleChange, name, value = undefined, error = null}) => {
     const {t} = useTranslation();
@@ -13,10 +14,9 @@ const GenderDropdown = ({ handleChange, name, value = undefined, error = null}) 
                 name={name}
                 onChange={handleChange}
                 value={value ? value : undefined}
-                className="input border border-primary/10 mt-2 rounded-md py-2 px-4 text-sm">
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                className={`input ${inputBorder} mt-2 rounded-md py-2 px-4 text-sm ${inputBackground}`}>
+                <option value="male">{capitalize(t("male"))}</option>
+                <option value="female">{capitalize(t("female"))}</option>
             </select>
 
             {error && <span className="text-red-500 text-sm mt-1">{error}</span>}

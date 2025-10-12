@@ -2,9 +2,11 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary: #273240;
+    --color-primary: #053345;
     --font-primary: "Quicksand", serif;
     --color-background: #f2f6fe;
+    --color-danger: #b91c1c;
+    --color-success: #4ADE80;
 
     --animate-shake: shake 0.4s ease-in-out;
     @keyframes shake {

@@ -7,6 +7,7 @@ import {capitalize, updateSearchParams} from "../../utils/helper.js";
 import scheduleServices from "../../services/scheduleService.js";
 import {useTranslation} from "react-i18next";
 import Action from "../Button/Action.jsx";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 
 const ScheduleTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -115,6 +116,7 @@ const ScheduleTable = () => {
     return (
         <>
             <DataTable header={header} columns={columns} items={schedules} pagination={pagination} isLoading={isLoading} />
+
         </>
     );
 };
