@@ -6,6 +6,10 @@ const getUserId = () => {
     return localStorage.getItem("employeeId");
 };
 
+const getAccountUserId= () => {
+    return localStorage.getItem("id");
+};
+
 const minutesToHM = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const minutesLeft = minutes % 60;
@@ -132,4 +136,4 @@ function scrollToTop() {
 
 
 
-export { getUserId, timestampToObject, getAuthToken, updateSearchParams, handlePageChange, formattedDate, getStatusColor, capitalize, minutesToHM, scrollToTop};
+export { getUserId, timestampToObject, getAuthToken, updateSearchParams, handlePageChange, formattedDate, getStatusColor, capitalize, minutesToHM, scrollToTop, getAccountUserId};

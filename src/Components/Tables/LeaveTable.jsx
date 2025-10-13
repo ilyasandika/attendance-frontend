@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {capitalize, getStatusColor, getUserId, updateSearchParams} from "../../utils/helper.js";
+import {capitalize, getAccountUserId, getStatusColor, getUserId, updateSearchParams} from "../../utils/helper.js";
 import leaveServices from "../../services/leaveServices.js";
 import {useTranslation} from "react-i18next";
 import {ArrowLongRightIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline/index.js";
@@ -28,7 +28,7 @@ const LeaveTable = () => {
     const currentPage = Number(searchParams.get("leaves_page")) || 1;
     const {t} = useTranslation();
     const isAdmin = utilServices.isAdmin();
-    const userId = getUserId();
+    const userId = getAccountUserId();
     const navigate = useNavigate();
 
     const {fieldErrors, generalError, setErrors, clearErrors} = useErrors()
