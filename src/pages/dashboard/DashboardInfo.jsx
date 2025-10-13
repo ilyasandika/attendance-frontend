@@ -66,7 +66,6 @@ const DashboardInfo = () => {
             const prevData = await attendanceServices.getAttendanceSummary(dayjs(date).subtract(1, "day").format("YYYY-MM-DD"));
             setPrevAttendanceSummary(prevData.data.payload);
             const data = response.data.payload;
-            console.log(data)
             setAttendanceSummary(data);
             setPieData([
                 { name: capitalize(t("onTime")), value: data.onTime.value, color: "#4ADE80" },
