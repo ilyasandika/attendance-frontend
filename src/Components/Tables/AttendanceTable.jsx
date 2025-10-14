@@ -9,6 +9,7 @@ import show from "../../assets/icons/show.svg";
 import {useTranslation} from "react-i18next";
 import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 import {useErrors} from "../../hooks/useErrors.jsx";
+import dayjs from "dayjs";
 
 
 const AttendanceTable = () => {
@@ -22,13 +23,19 @@ const AttendanceTable = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const {fieldErrors, generalError, setErrors, clearErrors} = useErrors()
 
+    const date = searchParams.get("date") || dayjs().format("YYYY-MM-DD");
+    useEffect(() => {
+        fetchAttendances(date);
+    }, [date]);
+
     const currentPage = Number(searchParams.get("attendance_page")) || 1;
 
-    const fetchAttendances = useCallback(async () => {
+    const fetchAttendances = useCallback(async (date) => {
         try {
             let response = {};
             if (utilServices.isAdmin()) {
-                response = await attendanceServices.getAttendances(currentPage, search);
+                console.log(date)
+                response = await attendanceServices.getAttendances(currentPage, search, date);
             } else {
                 response = await attendanceServices.getAttendanceByLogin(currentPage, search)
             }
@@ -48,14 +55,15 @@ const AttendanceTable = () => {
                 return prev;
             });
         }
-
         const timeout = setTimeout(() => {
             setIsLoading(true);
-            fetchAttendances();
+            fetchAttendances(date);
         }, 500);
 
         return () => clearTimeout(timeout);
     }, [currentPage, search]);
+
+
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, {
@@ -167,7 +175,6 @@ const AttendanceTable = () => {
     ], []);
 
 
-    // src={`${import.meta.env.VITE_API_URL}/storage/${user.profilePicturePath}`}
     const pagination = {
         setSearch,
         setSearchParams,

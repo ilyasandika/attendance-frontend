@@ -24,19 +24,21 @@ import dayjs from "dayjs";
 import {capitalize} from "../../utils/helper.js";
 import {useTranslation} from "react-i18next";
 import Loading from "../../Components/Utils/Loading.jsx";
+import {useSearchParams} from "react-router-dom";
 
-const DashboardInfo = () => {
+const DashboardInfo = ({}) => {
     const [areaChartOption, setAreaChartOption] = useState("daily");
     const [dataByTime, setDataByTime] = useState([{name : "default", value: 0 }]);
-    const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
     const [pieData, setPieData] = useState([])
     const [prevAttendanceSummary, setPrevAttendanceSummary] = useState({})
     const [attendanceSummary, setAttendanceSummary] = useState({})
     const [loading, setLoading] = useState(true)
     const [loadingTimeline, setLoadingTimeline] = useState(true)
     const [loadingSummary, setLoadingSummary] = useState(true)
-
+    const [searchParams, setSearchParams] = useSearchParams()
     const {t} = useTranslation();
+
+    const date = searchParams.get("date") || dayjs().format("YYYY-MM-DD");
 
     const getAttendanceTimeLine = async (option) => {
         try {
@@ -134,16 +136,6 @@ const DashboardInfo = () => {
     return (
      <>
 
-         <div className="flex justify-end mb-4">
-             <input
-                 type="date"
-                 defaultValue={date}
-                 className="p-2 text-center bg-white rounded-xl"
-                 onChange={(e) => setDate(e.target.value)}
-             />
-
-
-         </div>
 
 
          <div className="flex mb-4 gap-4 w-full">

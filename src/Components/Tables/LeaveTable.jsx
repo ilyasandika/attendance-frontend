@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../DataTable/DataTable.jsx";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {capitalize, getAccountUserId, getStatusColor, getUserId, updateSearchParams} from "../../utils/helper.js";
+import {
+    capitalize, formattedDate,
+    getAccountUserId,
+    getStatusColor,
+    getUserId,
+    timestampToObject,
+    updateSearchParams
+} from "../../utils/helper.js";
 import leaveServices from "../../services/leaveServices.js";
 import {useTranslation} from "react-i18next";
 import {ArrowLongRightIcon, EyeIcon, PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline/index.js";
@@ -260,9 +267,9 @@ const LeaveTable = () => {
                         <DetailLeaveItem label={"Nama Pegawai"}     value={data?.user?.name || ""}/>
                         <DetailLeaveItem label={"Jabatan"}          value={data?.user?.role || ""}/>
                         <DetailLeaveItem label={"Departemen"}       value={data?.user?.department || ""}/>
-                        <DetailLeaveItem label={"Type"}             value={data?.type || ""}/>
-                        <DetailLeaveItem label={"Mulai Cuti"}       value={data?.startDate || ""}/>
-                        <DetailLeaveItem label={"Berakhir Cuti"}    value={data?.endDate || ""}/>
+                        <DetailLeaveItem label={"Type"}             value={capitalize(t(data?.type)) || ""}/>
+                        <DetailLeaveItem label={"Mulai Cuti"}       value={formattedDate(data?.startDate) || ""}/>
+                        <DetailLeaveItem label={"Berakhir Cuti"}    value={formattedDate(data?.endDate) || ""}/>
                         <DetailLeaveItem label={"Total Hari Cuti"}  value={data?.totalDays || ""}/>
                         <DetailLeaveItem label={"Lampiran"}         value={<a href={data?.attachmentUrl || ""} target="_blank" className="text-blue-500">Klik untuk melihat</a>}/>
                         <DetailLeaveItem label={"Alasan"}           value={data?.reason || ""}/>
