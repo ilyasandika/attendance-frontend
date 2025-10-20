@@ -9,6 +9,8 @@ const userServices = {
             "Content-Type": "multipart/form-data",
         },
     }),
+
+    updateCurrentUser: async (data) => await api.post(`/users/edit`, data),
     getUserById: async (id) => api.get(`/users/${id}`),
     deleteUser: async (id) =>  await api.delete(`/users/${id}`),
     getTotalUserByDepartment : async () => await api.get(`/users/department`),

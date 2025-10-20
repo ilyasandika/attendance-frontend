@@ -99,9 +99,6 @@ const UpdateUserForm = () => {
         }
     };
 
-    console.log(formData)
-    console.log(roles)
-
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (files && files[0]) {
@@ -153,18 +150,36 @@ const UpdateUserForm = () => {
         }
 
 
-        await userServices.updateUser(requestData)
-            .then(res => {
-                navigate("/users", {
-                    state: {
-                        success: capitalize(t("successUpdateUser")),
-                    },
+        if (id) {
+            await userServices.updateUser(requestData)
+                .then(res => {
+                    navigate("/users", {
+                        state: {
+                            success: capitalize(t("successUpdateUser")),
+                        },
+                    });
+                })
+                .catch(error => {
+                    setErrors(error);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                 });
-            })
-            .catch(error => {
-                setErrors(error);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            });
+        } else if (location.pathname === "/profile/edit") {
+            await userServices.updateCurrentUser(requestData)
+                .then(res => {
+                    navigate("/users", {
+                        state: {
+                            success: capitalize(t("successUpdateUser")),
+                        },
+                    });
+                })
+                .catch(error => {
+                    setErrors(error);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+        }
+
+
+
     };
     return (
         <>
