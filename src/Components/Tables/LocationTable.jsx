@@ -15,6 +15,7 @@ const LocationTable = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState(searchParams.get("locations_search") || "");
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const {t} = useTranslation();
     const navigate = useNavigate();
     const currentPage = Number(searchParams.get("locations_page")) || 1;
@@ -23,7 +24,7 @@ const LocationTable = () => {
 
     const fetchLocations = useCallback(async () => {
         try {
-            const response = await locationServices.getLocationList(currentPage, search);
+            const response = await locationServices.getLocationList(currentPage, search, rowsPerPage);
             setLocations(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -31,7 +32,7 @@ const LocationTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteLocation = async (id) => {
               await locationServices.deleteLocation(id)
@@ -59,7 +60,7 @@ const LocationTable = () => {
             fetchLocations();
         }, 500);
         return () => clearTimeout(timeout);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, {
@@ -127,6 +128,8 @@ const LocationTable = () => {
         setSearch,
         setSearchParams,
         search,
+        setRowsPerPage,
+        rowsPerPage,
         searchParams,
         totalPages,
         currentPage,

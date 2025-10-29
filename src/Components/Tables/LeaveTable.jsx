@@ -25,6 +25,7 @@ const LeaveTable = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [leaves, setLeaves] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteModal, setDeleteModal] = useState(false);
     const [formModal, setFormModal] = useState(false);
     const [detailModal, setDetailModal] = useState(false);
@@ -44,9 +45,9 @@ const LeaveTable = () => {
         try {
             let response;
             if (isAdmin) {
-                response = await leaveServices.getLeaves(currentPage, search, ["pending", "approved", "rejected"]);
+                response = await leaveServices.getLeaves(currentPage, search, ["pending", "approved", "rejected"], rowsPerPage);
             } else {
-                response = await leaveServices.getLeavesByUserId(currentPage, search, ["pending", "approved", "rejected", "draft"], userId);
+                response = await leaveServices.getLeavesByUserId(currentPage, search, ["pending", "approved", "rejected", "draft"], userId, rowsPerPage);
             }
             setLeaves(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
@@ -55,7 +56,7 @@ const LeaveTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteLeave = async (id) => {
         await leaveServices.deleteLeave(id)
@@ -118,7 +119,7 @@ const LeaveTable = () => {
             fetchLeaves();
         }, 500);
         return () => clearTimeout(getLeaves);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
 
     useEffect(() => {
@@ -239,6 +240,8 @@ const LeaveTable = () => {
         setSearch,
         setSearchParams,
         search,
+        setRowsPerPage,
+        rowsPerPage,
         searchParams,
         totalPages,
         currentPage,

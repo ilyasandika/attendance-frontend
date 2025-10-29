@@ -19,6 +19,7 @@ const LeaveEntitlement = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [leaves, setLeaves] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [search, setSearch] = useState(searchParams.get("leave_entitlements_search") || "");
     const [comment, setComment] = useState("");
     const [data, setData] = useState({    });
@@ -30,7 +31,7 @@ const LeaveEntitlement = () => {
 
     const fetchLeaves = useCallback(async () => {
         try {
-            const response = await leaveEntitlementServices.getLeaveEntitlements(currentPage, search);
+            const response = await leaveEntitlementServices.getLeaveEntitlements(currentPage, search, rowsPerPage);
             setLeaves(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (err) {
@@ -38,7 +39,7 @@ const LeaveEntitlement = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const getLeaveById = async (id) => {
         await leaveServices.getLeaveById(id)
@@ -61,7 +62,7 @@ const LeaveEntitlement = () => {
             fetchLeaves();
         }, 500);
         return () => clearTimeout(getLeaves);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
 
     useEffect(() => {
@@ -145,6 +146,8 @@ const LeaveEntitlement = () => {
 
     const pagination = {
         setSearch,
+        setRowsPerPage,
+        rowsPerPage,
         setSearchParams,
         search,
         searchParams,

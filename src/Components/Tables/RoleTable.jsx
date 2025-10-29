@@ -12,6 +12,7 @@ import departmentServices from "../../services/departmentServices.js";
 const RoleTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [roles, setRoles] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState(searchParams.get("roles_search") || "");
@@ -22,7 +23,7 @@ const RoleTable = () => {
     const navigate = useNavigate();
     const fetchRoles = useCallback(async () => {
         try {
-            const response = await roleServices.getRoles(currentPage, search);
+            const response = await roleServices.getRoles(currentPage, search, rowsPerPage);
             setRoles(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -30,7 +31,7 @@ const RoleTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteRole = async (id) => {
                await roleServices.deleteRole(id)
@@ -60,7 +61,7 @@ const RoleTable = () => {
         }, 500);
 
         return () => clearTimeout(getRoles);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, {
@@ -123,6 +124,8 @@ const RoleTable = () => {
         setSearch,
         setSearchParams,
         search,
+        setRowsPerPage,
+        rowsPerPage,
         searchParams,
         totalPages,
         currentPage,

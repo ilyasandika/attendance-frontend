@@ -12,6 +12,7 @@ const HolidayTable = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [holidays, setHolidays] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const {t} = useTranslation();
@@ -22,7 +23,7 @@ const HolidayTable = () => {
 
     const fetchHolidays = useCallback(async () => {
         try {
-            const response = await holidayServices.getHolidays(currentPage, search);
+            const response = await holidayServices.getHolidays(currentPage, search, rowsPerPage);
             setHolidays(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -30,7 +31,7 @@ const HolidayTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteHoliday = async (id) => {
 
@@ -59,7 +60,7 @@ const HolidayTable = () => {
             fetchHolidays();
         }, 500);
         return () => clearTimeout(getHolidays);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, { pageName: "holidays_page", searchName: "holidays_search" });
@@ -110,6 +111,8 @@ const HolidayTable = () => {
         setSearch,
         setSearchParams,
         search,
+        setRowsPerPage,
+        rowsPerPage,
         searchParams,
         totalPages,
         currentPage,

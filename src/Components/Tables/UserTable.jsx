@@ -16,6 +16,7 @@ const UserTable = ({setSuccessMessage}) => {
     const [confirmModal, setConfirmModal] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [users, setUsers] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState(searchParams.get("search") || "");
@@ -23,9 +24,9 @@ const UserTable = ({setSuccessMessage}) => {
     const currentPage = Number(searchParams.get("page")) || 1;
 
     const fetchUsers = useCallback(async () => {
-
         try {
-            const response = await userServices.getUsers(currentPage, search);
+
+            const response = await userServices.getUsers(currentPage, search, rowsPerPage);
             setUsers(response.data.payload.users);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -33,7 +34,7 @@ const UserTable = ({setSuccessMessage}) => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteUser = async (id) => {
         await userServices.deleteUser(id)
@@ -58,7 +59,7 @@ const UserTable = ({setSuccessMessage}) => {
             fetchUsers();
         }, 500);
         return () => clearTimeout(getUsers);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage ]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search);
@@ -143,6 +144,8 @@ const UserTable = ({setSuccessMessage}) => {
         searchParams,
         totalPages,
         currentPage,
+        setRowsPerPage,
+        RowsPerPage: rowsPerPage,
         pageName: "page",
     };
 

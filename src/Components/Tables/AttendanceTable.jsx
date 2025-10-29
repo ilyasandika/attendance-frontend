@@ -19,6 +19,7 @@ const AttendanceTable = () => {
     const [search, setSearch] = useState(searchParams.get("attendance_search") || "");
     const [totalPages, setTotalPages] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const {fieldErrors, generalError, setErrors, clearErrors} = useErrors()
@@ -35,9 +36,9 @@ const AttendanceTable = () => {
             let response = {};
             if (utilServices.isAdmin()) {
                 console.log(date)
-                response = await attendanceServices.getAttendances(currentPage, search, date);
+                response = await attendanceServices.getAttendances(currentPage, search, date, rowsPerPage);
             } else {
-                response = await attendanceServices.getAttendanceByLogin(currentPage, search)
+                response = await attendanceServices.getAttendanceByLogin(currentPage, search, rowsPerPage)
             }
             setAttendances(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
@@ -46,7 +47,7 @@ const AttendanceTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         if (!searchParams.get("attendance_page")) {
@@ -61,7 +62,7 @@ const AttendanceTable = () => {
         }, 500);
 
         return () => clearTimeout(timeout);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
 
 
@@ -181,6 +182,8 @@ const AttendanceTable = () => {
         search,
         searchParams,
         totalPages,
+        RowsPerPage: rowsPerPage,
+        setRowsPerPage,
         currentPage,
         pageName: "attendance_page",
     };

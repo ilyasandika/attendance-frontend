@@ -5,8 +5,9 @@ import utilServices from "../../services/utilServices.js";
 import AuthServices from "../../services/AuthServices.js";
 import profilePicturePath from "../../assets/images/default.svg";
 import ProfileModal from "../../Modal/ProfileModal.jsx";
+import {Bars3Icon} from "@heroicons/react/24/outline/index.js";
 
-const Header = () => {
+const Header = ({minimize, setMinimize}) => {
     const [user, setUser] = useState({});
     const [serverTime, setServerTime] = useState({
         day: "",
@@ -73,7 +74,8 @@ const Header = () => {
     };
 
     return (
-        <header className="z-50 bg-white px-10 py-10 fixed left-64 top-0 right-0 h-16 flex items-center justify-between">
+        <header className="z-50 bg-white shadow-xs px-10 py-10 fixed left-64 top-0 right-0 h-16 flex items-center justify-between">
+            {/*<Bars3Icon className="w-6 cursor-pointer" onClick={()=>setMinimize(!minimize)}/>*/}
             <h1 className="font-semibold">
                 {serverTime.day ? `${formatDateTime(serverTime.datetime)}` : "Loading data ..."}
             </h1>

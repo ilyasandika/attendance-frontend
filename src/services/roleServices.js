@@ -1,7 +1,7 @@
 import api from "../utils/api.js";
 
 const roleServices = {
-    getRoles: async (page, search) => await api.get(`/roles?page=${page}&search=${search}`),
+    getRoles: async (page, search, rows) => await api.get(`/roles`, { params : { page, search, rows } }),
 
     getRoleDropdown: async () => await api.get(`/roles/all`),
 

@@ -15,6 +15,7 @@ const DepartmentTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
     const [departments, setDepartments] = useState([]);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState(searchParams.get("departments_search") || "");
     const [deleteModal, setDeleteModal] = useState(false);
@@ -24,7 +25,7 @@ const DepartmentTable = () => {
     const navigate = useNavigate();
     const fetchDepartments = useCallback(async () => {
         try {
-            const response = await departmentServices.getDepartments(currentPage, search);
+            const response = await departmentServices.getDepartments(currentPage, search, rowsPerPage);
             setDepartments(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -32,7 +33,7 @@ const DepartmentTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteDepartment = async (id) => {
 
@@ -63,7 +64,7 @@ const DepartmentTable = () => {
         }, 500);
 
         return () => clearTimeout(getDepartments);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, {
@@ -118,6 +119,8 @@ const DepartmentTable = () => {
     const pagination = {
         setSearch,
         setSearchParams,
+        setRowsPerPage,
+        rowsPerPage,
         search,
         searchParams,
         totalPages,

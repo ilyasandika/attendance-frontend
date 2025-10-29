@@ -1,7 +1,7 @@
 import api from "../utils/api.js";
 
 const departmentServices = {
-    getDepartments: async (page, search) => await api.get(`/departments?page=${page}&search=${search}`),
+    getDepartments: async (page, search, rows) => await api.get(`/departments`, { params: { page, search, rows } }),
 
     getDepartmentsDropdown: async () =>  await api.get(`/departments/all`),
 

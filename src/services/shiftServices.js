@@ -3,8 +3,8 @@ import api from "../utils/api.js";
 const shiftServices = {
     getShiftDropdown: () => api.get("/shifts/all"),
 
-    getShifts: async (page, search) =>  await api.get("/shifts", {
-        params: { page, search },
+    getShifts: async (page, search, rows) =>  await api.get("/shifts", {
+        params: { page, search, rows },
     }),
 
     getShiftById: async (id) => await api.get(`/shifts/${id}`),

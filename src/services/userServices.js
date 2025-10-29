@@ -2,7 +2,7 @@ import api from "../utils/api.js";
 
 const userServices = {
     getCurrent: async () => await api.get("/users/current"),
-    getUsers: async (page, search, all = "") => api.get("/users",{ params: { page, search, all }}),
+    getUsers: async (page, search, rows, all = "") => api.get("/users",{ params: { page, search, rows, all }}),
     createUser: async (data) => await api.post("/users", data),
     updateUser: async (data) => await api.post(`/users/${data.id}`, data, {
         headers: {

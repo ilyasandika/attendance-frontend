@@ -15,6 +15,7 @@ const ShiftTable = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [shifts, setShifts] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [search, setSearch] = useState(searchParams.get("shifts_search") || "");
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
@@ -23,7 +24,7 @@ const ShiftTable = () => {
 
     const fetchShifts = useCallback(async () => {
         try {
-            const response = await shiftServices.getShifts(currentPage, search);
+            const response = await shiftServices.getShifts(currentPage, search, rowsPerPage);
             setShifts(response.data.payload.data);
             setTotalPages(response.data.payload.meta.lastPage || 1);
         } catch (error) {
@@ -31,7 +32,7 @@ const ShiftTable = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     const deleteShifts = async (id) => {
         try {
@@ -56,7 +57,7 @@ const ShiftTable = () => {
             fetchShifts();
         }, 500);
         return () => clearTimeout(getShifts);
-    }, [currentPage, search]);
+    }, [currentPage, search, rowsPerPage]);
 
     useEffect(() => {
         updateSearchParams(setSearchParams, currentPage, search, { pageName: "shifts_page", searchName: "shifts_search" });
@@ -122,6 +123,8 @@ const ShiftTable = () => {
         setSearch,
         setSearchParams,
         search,
+        setRowsPerPage,
+        rowsPerPage,
         searchParams,
         totalPages,
         currentPage,

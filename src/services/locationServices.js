@@ -1,10 +1,11 @@
 import api from "../utils/api.js";
 
 const locationServices = {
-    getLocationList: (page, search) =>api.get("/locations", {
+    getLocationList: (page, search, rows) =>api.get("/locations", {
         params: {
             page,
             search,
+            rows
         },
     }),
     getLocationDropdown: () => api.get("/locations/all"),
