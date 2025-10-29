@@ -5,9 +5,12 @@ import App from "./App";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
 import "./i18n";
+import {SidebarProvider} from "./contexts/useSideBar.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
-        <App />
+        <SidebarProvider>
+            <App />
+        </SidebarProvider>
     </BrowserRouter>
 );

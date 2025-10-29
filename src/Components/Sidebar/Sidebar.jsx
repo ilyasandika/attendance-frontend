@@ -9,12 +9,14 @@ import {
 } from "@heroicons/react/16/solid/index.js";
 import {capitalize} from "../../utils/helper.js";
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Bars3Icon} from "@heroicons/react/24/outline/index.js";
+import {useSidebar} from "../../contexts/useSideBar.jsx";
 
-const Sidebar = ({minimize, setMinimize}) => {
+const Sidebar = ({}) => {
     const location = useLocation();
     const isAdmin = utilServices.isAdmin();
+    const {minimize, setMinimize} = useSidebar();
     const {t} = useTranslation();
     const itemStyle = "h-5 text-primary/40"
     const activeItemStyle = `${itemStyle} text-primary/100`
@@ -97,17 +99,29 @@ const Sidebar = ({minimize, setMinimize}) => {
     ]
 
 
+    useEffect(() => {
+        console.log(minimize)
+    }, [minimize]);
+
     const toggleMinimize = () => {
-        setMinimize(!minimize);
+        setMinimize(true);
+
     }
 
     return (
         <>
-            <div className="fixed top-30 left-60 z-200 p-2 bg-primary text-white rounded-full">
-                <ChevronLeftIcon className="h-6 w-6" onClick={toggleMinimize}/>
+            {/*<div className={`fixed top-25  z-200 p-1 cursor-pointer bg-primary text-white rounded-lg  transition-transform duration-300 ease-in-out ${minimize && "left-0 -translate-x-full"}`}>*/}
+            {/*    <ChevronLeftIcon className="h-6 w-6" onClick={toggleMinimize}/>*/}
+            {/*</div>*/}
+            <div className={`hidden absolute top-0 left-0 z-50 w-screen h-screen bg-primary/40 ${!minimize && "inline"}`} onClick={toggleMinimize}>
+
             </div>
-            <aside className="fixed w-64 bg-white text-primary min-h-screen overflow-y-auto py-5 px-8 z-50">
+
+
+            <aside className={`z-50 -translate-x-full fixed xl:translate-x-0 w-64 bg-white text-primary h-screen overflow-y-auto py-5 px-8 transition-transform duration-300 ease-in-out ${!minimize && "translate-x-0 border-r border-gray-200"}`}>
+
                 <img src="/images/LOGO_ALHAYAH.png" className="mx-auto w-40" />
+
                 <ul className="mt-4">
                     <div className="flex items-center gap-4 flex-row text-sm text-primary/70">
                         <span>Home</span>

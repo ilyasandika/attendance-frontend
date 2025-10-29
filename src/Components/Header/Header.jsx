@@ -6,13 +6,15 @@ import AuthServices from "../../services/AuthServices.js";
 import profilePicturePath from "../../assets/images/default.svg";
 import ProfileModal from "../../Modal/ProfileModal.jsx";
 import {Bars3Icon} from "@heroicons/react/24/outline/index.js";
+import {useSidebar} from "../../contexts/useSideBar.jsx";
 
-const Header = ({minimize, setMinimize}) => {
+const Header = () => {
     const [user, setUser] = useState({});
     const [serverTime, setServerTime] = useState({
         day: "",
         datetime: new Date(),
     });
+    const {minimize, setMinimize} = useSidebar();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -74,11 +76,16 @@ const Header = ({minimize, setMinimize}) => {
     };
 
     return (
-        <header className="z-50 bg-white shadow-xs px-10 py-10 fixed left-64 top-0 right-0 h-16 flex items-center justify-between">
+        <header className={`z-50 bg-white shadow-xs px-10 py-10 fixed left-0 xl:left-64 right-0 top-0 h-16 flex  items-center justify-between`}>
             {/*<Bars3Icon className="w-6 cursor-pointer" onClick={()=>setMinimize(!minimize)}/>*/}
-            <h1 className="font-semibold">
+            <h1 className="font-semibold hidden xl:inline">
                 {serverTime.day ? `${formatDateTime(serverTime.datetime)}` : "Loading data ..."}
             </h1>
+
+            <div className="inline xl:hidden cursor-pointer" onClick={()=> setMinimize(false)}>
+                <Bars3Icon className=" w-8 h-8"/>
+            </div>
+
 
             <div className="relative">
                 <div

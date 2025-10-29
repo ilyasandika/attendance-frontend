@@ -6,7 +6,7 @@ import {useState} from "react";
 const Layout = () => {
     const location = useLocation();
     const isAuthPage = location.pathname === "/login";
-    const [minimize, setMinimize] = useState(false);
+    const [minimize, setMinimize] = useState(true);
 
     return isAuthPage ? (
         <Outlet />
@@ -15,7 +15,7 @@ const Layout = () => {
             <Header minimize={minimize} setMinimize={setMinimize}  />
             <div className="flex-1">
             <Sidebar minimize={minimize} setMinimize={setMinimize} />
-                <main className="p-14 ml-64 mt-14 text-center">
+                <main className="p-14 xl:ml-64 mt-14 text-center">
                     <Outlet />
                 </main>
             </div>
